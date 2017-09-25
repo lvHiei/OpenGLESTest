@@ -7,6 +7,7 @@ import android.view.WindowManager;
 
 import com.lvhiei.openglestest.render.FirstProgramRender;
 import com.lvhiei.openglestest.render.IGLESRenderer;
+import com.lvhiei.openglestest.render.TriangleRender;
 
 public class GLES20Activity extends Activity {
 
@@ -41,6 +42,9 @@ public class GLES20Activity extends Activity {
         switch (mRenderId){
             case R.id.btn_firstGLESPrograme:
                 mRender = new FirstProgramRender();
+                break;
+            case R.id.btn_drawTriangle:
+                mRender = new TriangleRender();
                 break;
             default:
                 mRender = new FirstProgramRender();

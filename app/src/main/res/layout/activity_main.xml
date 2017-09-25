@@ -24,6 +24,13 @@
                 android:layout_gravity="center"
                 android:text="first gles program"/>
 
+            <Button
+                android:id="@+id/btn_drawTriangle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="drawTriangle"/>
+
         </LinearLayout>
 
     </ScrollView>
