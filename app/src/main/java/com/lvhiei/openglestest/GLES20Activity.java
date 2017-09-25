@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import com.lvhiei.openglestest.render.CircleRender;
 import com.lvhiei.openglestest.render.FirstProgramRender;
 import com.lvhiei.openglestest.render.IGLESRenderer;
 import com.lvhiei.openglestest.render.SquareRender;
@@ -49,6 +50,9 @@ public class GLES20Activity extends Activity {
                 break;
             case R.id.btn_drawSquare:
                 mRender = new SquareRender();
+                break;
+            case R.id.btn_drawCircle:
+                mRender = new CircleRender();
                 break;
             default:
                 mRender = new FirstProgramRender();
