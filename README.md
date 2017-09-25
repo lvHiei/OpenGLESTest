@@ -1,2 +1,2 @@
 # OpenGLESTest
-learning opengl case
+learning opengles2.0 case
