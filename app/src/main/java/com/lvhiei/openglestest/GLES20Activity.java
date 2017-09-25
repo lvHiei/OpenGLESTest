@@ -7,6 +7,7 @@ import android.view.WindowManager;
 
 import com.lvhiei.openglestest.render.FirstProgramRender;
 import com.lvhiei.openglestest.render.IGLESRenderer;
+import com.lvhiei.openglestest.render.SquareRender;
 import com.lvhiei.openglestest.render.TriangleRender;
 
 public class GLES20Activity extends Activity {
@@ -45,6 +46,9 @@ public class GLES20Activity extends Activity {
                 break;
             case R.id.btn_drawTriangle:
                 mRender = new TriangleRender();
+                break;
+            case R.id.btn_drawSquare:
+                mRender = new SquareRender();
                 break;
             default:
                 mRender = new FirstProgramRender();

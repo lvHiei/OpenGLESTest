@@ -31,6 +31,13 @@
                 android:layout_gravity="center"
                 android:text="drawTriangle"/>
 
+            <Button
+                android:id="@+id/btn_drawSquare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="drawSquare"/>
+
         </LinearLayout>
 
     </ScrollView>
