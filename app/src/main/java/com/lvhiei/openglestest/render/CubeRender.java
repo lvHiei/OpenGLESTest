@@ -112,13 +112,30 @@ public class CubeRender implements IGLESRenderer {
         final float aspectRatio = width > height ?
                 (float) width / (float) height :
                 (float) height / (float) width;
+
+//        final float near = 20.0f;
+//        final float far = 100.0f;
+//
+//        final float cx = 0.0f;
+//        final float cy = 5.0f;
+//        final float cz = 45.0f;
+
+
+        final float near = 20.0f;
+        final float far = 100.0f;
+
+        final float cx = -16.0f;
+        final float cy = 8.0f;
+        final float cz = 45.0f;
+
+
         if(width > height){
-            MatrixUtil.setProjectFrustum(-aspectRatio, aspectRatio, -1.0f, 1.0f, 20, 100);
+            MatrixUtil.setProjectFrustum(-aspectRatio, aspectRatio, -1.0f, 1.0f, near, far);
         }else{
-            MatrixUtil.setProjectFrustum(-1.0f, 1.0f, -aspectRatio, aspectRatio, 20, 100);
+            MatrixUtil.setProjectFrustum(-1.0f, 1.0f, -aspectRatio, aspectRatio, near, far);
         }
 
-        MatrixUtil.setCamera(-16.0f, 8.0f, 45.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        MatrixUtil.setCamera(cx, cy, cz, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
     }
 
 
@@ -139,6 +156,7 @@ public class CubeRender implements IGLESRenderer {
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
         GLES20.glViewport(0, 0, width, height);
+//        GLES20.glDepthRangef(20, 100);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         int apos_loc = GLES20.glGetAttribLocation(mProgram, "a_Position");
