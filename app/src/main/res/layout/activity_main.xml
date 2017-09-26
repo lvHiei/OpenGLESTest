@@ -52,6 +52,13 @@
                 android:layout_gravity="center"
                 android:text="drawCube"/>
 
+            <Button
+                android:id="@+id/btn_drawColorCube"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="drawColorCube"/>
+
         </LinearLayout>
 
     </ScrollView>

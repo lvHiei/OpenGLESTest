@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.lvhiei.openglestest.render.CircleRender;
+import com.lvhiei.openglestest.render.ColorCubeRender;
 import com.lvhiei.openglestest.render.CubeRender;
 import com.lvhiei.openglestest.render.FirstProgramRender;
 import com.lvhiei.openglestest.render.IGLESRenderer;
@@ -68,6 +69,10 @@ public class GLES20Activity extends Activity {
                 break;
             case R.id.btn_drawCube:
                 mRender = new CubeRender();
+                mbLandScape = true;
+                break;
+            case R.id.btn_drawColorCube:
+                mRender = new ColorCubeRender();
                 mbLandScape = true;
                 break;
             default:

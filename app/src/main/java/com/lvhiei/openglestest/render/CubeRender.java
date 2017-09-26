@@ -42,7 +42,7 @@ public class CubeRender implements IGLESRenderer {
 
 
     // draw triangle fan
-    private final float[] vertices = {
+    protected final float[] vertices = {
             // front z is 1.0f
             0.0f, 0.0f, 1.0f,
             -1.0f, 1.0f, 1.0f,
@@ -95,8 +95,10 @@ public class CubeRender implements IGLESRenderer {
             1.0f, -1.0f, 1.0f,
     };
 
-    private FloatBuffer mVertexCoordinate;
-    private int mProgram;
+
+
+    protected FloatBuffer mVertexCoordinate;
+    protected int mProgram;
 
 
     public CubeRender(){
@@ -108,7 +110,7 @@ public class CubeRender implements IGLESRenderer {
     }
 
 
-    private void projectFrustumMatrix(int width, int height){
+    protected void projectFrustumMatrix(int width, int height){
         final float aspectRatio = width > height ?
                 (float) width / (float) height :
                 (float) height / (float) width;
@@ -158,6 +160,9 @@ public class CubeRender implements IGLESRenderer {
         GLES20.glViewport(0, 0, width, height);
 //        GLES20.glDepthRangef(20, 100);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+//        //打开背面剪裁
+//        GLES20.glEnable(GLES20.GL_CULL_FACE);
 
         int apos_loc = GLES20.glGetAttribLocation(mProgram, "a_Position");
         GLES20.glVertexAttribPointer(apos_loc, 3, GLES20.GL_FLOAT, false, 0, mVertexCoordinate);
