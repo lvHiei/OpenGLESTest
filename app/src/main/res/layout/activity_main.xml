@@ -45,6 +45,13 @@
                 android:layout_gravity="center"
                 android:text="drawCircle"/>
 
+            <Button
+                android:id="@+id/btn_drawCube"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="drawCube"/>
+
         </LinearLayout>
 
     </ScrollView>

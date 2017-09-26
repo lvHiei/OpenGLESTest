@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_drawTriangle).setOnClickListener(mListener);
         findViewById(R.id.btn_drawSquare).setOnClickListener(mListener);
         findViewById(R.id.btn_drawCircle).setOnClickListener(mListener);
+        findViewById(R.id.btn_drawCube).setOnClickListener(mListener);
     }
 
 

@@ -1,11 +1,13 @@
 package com.lvhiei.openglestest;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.lvhiei.openglestest.render.CircleRender;
+import com.lvhiei.openglestest.render.CubeRender;
 import com.lvhiei.openglestest.render.FirstProgramRender;
 import com.lvhiei.openglestest.render.IGLESRenderer;
 import com.lvhiei.openglestest.render.SquareRender;
@@ -16,6 +18,8 @@ public class GLES20Activity extends Activity {
     private int mRenderId;
     private GLSurfaceView mSurfaceView;
     private IGLESRenderer mRender;
+    private boolean mbLandScape;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +28,18 @@ public class GLES20Activity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        mbLandScape = false;
+
         Bundle bundle = getIntent().getExtras();
         mRenderId = bundle.getInt("renderid");
 
         initGLSurfaceView();
+
+        if(mbLandScape){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
     private void initGLSurfaceView(){
@@ -53,6 +65,10 @@ public class GLES20Activity extends Activity {
                 break;
             case R.id.btn_drawCircle:
                 mRender = new CircleRender();
+                break;
+            case R.id.btn_drawCube:
+                mRender = new CubeRender();
+                mbLandScape = true;
                 break;
             default:
                 mRender = new FirstProgramRender();

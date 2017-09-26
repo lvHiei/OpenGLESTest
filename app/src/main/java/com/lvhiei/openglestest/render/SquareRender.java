@@ -82,7 +82,7 @@ public class SquareRender implements IGLESRenderer{
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
         GLES20.glViewport(0, 0, width, height);
-        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         int apos_loc = GLES20.glGetAttribLocation(mProgram, "a_Position");
         GLES20.glVertexAttribPointer(apos_loc, 2, GLES20.GL_FLOAT, false, 0, mVertexCoordinate);
