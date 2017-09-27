@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.lvhiei.openglestest.render.BallRender;
 import com.lvhiei.openglestest.render.CircleRender;
 import com.lvhiei.openglestest.render.ColorCubeRender;
 import com.lvhiei.openglestest.render.CubeRender;
@@ -76,6 +77,10 @@ public class GLES20Activity extends Activity {
                         }
 
                         MatrixUtil.setScale(scalex, scalex, scalex);
+                        MatrixUtil.setRotate(30f, 0.0f, 1.0f, 0.0f);
+                        mSurfaceView.requestRender();
+                    }else if(mRenderId == R.id.btn_drawBall){
+                        MatrixUtil.setRotate(30, 0.0f, 1.0f, 0.0f);
                         mSurfaceView.requestRender();
                     }
                     break;
@@ -117,6 +122,8 @@ public class GLES20Activity extends Activity {
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         mRender.setGLSurface(mSurfaceView);
         mSurfaceView.setOnTouchListener(mTouchListener);
+
+        MatrixUtil.initTRS();
     }
 
 
@@ -153,6 +160,10 @@ public class GLES20Activity extends Activity {
                 break;
             case R.id.btn_scaleColorCube:
                 mRender = new ScaleCubeRender();
+//                mbLandScape = true;
+                break;
+            case R.id.btn_drawBall:
+                mRender = new BallRender();
 //                mbLandScape = true;
                 break;
             default:

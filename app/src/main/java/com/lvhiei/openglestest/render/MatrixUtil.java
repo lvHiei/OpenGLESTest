@@ -17,11 +17,14 @@ public class MatrixUtil {
     private static float[] mFinalMatrix = new float[16];
 
     static {
+        initTRS();
+    }
+
+    public static void initTRS(){
         Matrix.setIdentityM(mtMatrix, 0);
         Matrix.setIdentityM(mrMatrix, 0);
         Matrix.setIdentityM(msMatrix, 0);
     }
-
 
     // 设置摄像头位置 c[xyz] 摄像头位置 t[xyz] 目标点位置 up[xyz] 摄像头up向量
     public static void setCamera(float cx, float cy, float cz,
@@ -42,11 +45,6 @@ public class MatrixUtil {
      */
     public static void setProjectFrustum(float left, float right, float bottom, float top, float near, float far){
         Matrix.frustumM(mProjectMatrix, 0, left, right, bottom, top, near, far);
-    }
-
-    public static float[] getFinalMatrix(){
-        Matrix.multiplyMM(mFinalMatrix, 0, mProjectMatrix, 0, mVMatrix, 0);
-        return mFinalMatrix;
     }
 
     /**
@@ -97,4 +95,13 @@ public class MatrixUtil {
         Matrix.multiplyMM(mFinalMatrix, 0, mProjectMatrix, 0, mFinalMatrix, 0);
         return mFinalMatrix;
     }
+
+    public static float[] getFinalMatrix(){
+        Matrix.multiplyMM(mFinalMatrix, 0, mrMatrix, 0, mtMatrix, 0);
+        Matrix.multiplyMM(mFinalMatrix, 0, msMatrix, 0, mFinalMatrix, 0);
+        Matrix.multiplyMM(mFinalMatrix, 0, mVMatrix, 0, mFinalMatrix, 0);
+        Matrix.multiplyMM(mFinalMatrix, 0, mProjectMatrix, 0, mFinalMatrix, 0);
+        return mFinalMatrix;
+    }
+
 }
