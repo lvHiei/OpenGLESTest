@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_rotateColorCube).setOnClickListener(mListener);
         findViewById(R.id.btn_scaleColorCube).setOnClickListener(mListener);
         findViewById(R.id.btn_drawBall).setOnClickListener(mListener);
+        findViewById(R.id.btn_textureSquare).setOnClickListener(mListener);
     }
 
 

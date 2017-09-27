@@ -20,6 +20,7 @@ import com.lvhiei.openglestest.render.MatrixUtil;
 import com.lvhiei.openglestest.render.RotateCubeRender;
 import com.lvhiei.openglestest.render.ScaleCubeRender;
 import com.lvhiei.openglestest.render.SquareRender;
+import com.lvhiei.openglestest.render.TextureSquareRender;
 import com.lvhiei.openglestest.render.TranstateCubeRender;
 import com.lvhiei.openglestest.render.TriangleRender;
 
@@ -164,6 +165,11 @@ public class GLES20Activity extends Activity {
                 break;
             case R.id.btn_drawBall:
                 mRender = new BallRender();
+//                mbLandScape = true;
+                break;
+
+            case R.id.btn_textureSquare:
+                mRender = new TextureSquareRender(this);
 //                mbLandScape = true;
                 break;
             default:
