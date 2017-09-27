@@ -84,6 +84,13 @@ public class TextureSquareRender implements IGLESRenderer{
     }
 
     private void initCoordinate(){
+//
+//        for(int i = 0; i < textureCoordinate.length; ++i){
+//            if(i % 2 == 0){
+//                textureCoordinate[i] = 2 * textureCoordinate[i];
+//            }
+//        }
+
         mVertexCoordinate = ByteBuffer.allocateDirect(Points.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
@@ -100,6 +107,7 @@ public class TextureSquareRender implements IGLESRenderer{
     }
 
     private void projectionMatrix(int width, int height){
+//        width = width/2;
         final float aspectRatio = width > height ?
                 (float) width / (float) height :
                 (float) height / (float) width;
@@ -145,6 +153,8 @@ public class TextureSquareRender implements IGLESRenderer{
         mTextureLoc = GLES20.glGetUniformLocation(mProgram, "u_TextureUnit");
 
         mTextureId = OpenGLUtils.loadTexture(mContext, "hiei.bmp");
+//        mTextureId = OpenGLUtils.loadRepeatTexture(mContext, "hiei.bmp");
+//        mTextureId = OpenGLUtils.loadMirrorRepeatTexture(mContext, "hiei.bmp");
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
