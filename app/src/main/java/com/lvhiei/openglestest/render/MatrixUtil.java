@@ -12,10 +12,14 @@ public class MatrixUtil {
     private static float[] mProjectMatrix = new float[16];
     private static float[] mVMatrix = new float[16];
     private static float[] mtMatrix = new float[16];
+    private static float[] mrMatrix = new float[16];
+    private static float[] msMatrix = new float[16];
     private static float[] mFinalMatrix = new float[16];
 
     static {
         Matrix.setIdentityM(mtMatrix, 0);
+        Matrix.setIdentityM(mrMatrix, 0);
+        Matrix.setIdentityM(msMatrix, 0);
     }
 
 
@@ -57,6 +61,39 @@ public class MatrixUtil {
 
     public static float[] getTranslateFinalMatrix(){
         Matrix.multiplyMM(mFinalMatrix, 0, mVMatrix, 0, mtMatrix, 0);
+        Matrix.multiplyMM(mFinalMatrix, 0, mProjectMatrix, 0, mFinalMatrix, 0);
+        return mFinalMatrix;
+    }
+
+    /**
+     *  旋转
+     * @param angle     旋转角度
+     * @param x         旋转中心x分量
+     * @param y         旋转中心y分量
+     * @param z         旋转中心z分量
+     */
+    public static void setRotate(float angle, float x, float y, float z){
+        Matrix.rotateM(mrMatrix, 0, angle, x, y, z);
+    }
+
+    public static float[] getRotateFinalMatrix(){
+        Matrix.multiplyMM(mFinalMatrix, 0, mVMatrix, 0, mrMatrix, 0);
+        Matrix.multiplyMM(mFinalMatrix, 0, mProjectMatrix, 0, mFinalMatrix, 0);
+        return mFinalMatrix;
+    }
+
+    /**
+     * 缩放
+     * @param x     x轴方向缩放率
+     * @param y     y轴方向缩放率
+     * @param z     z轴方向缩放率
+     */
+    public static void setScale(float x, float y, float z){
+        Matrix.scaleM(msMatrix, 0, x, y, z);
+    }
+
+    public static float[] getScaleFinalMatrix(){
+        Matrix.multiplyMM(mFinalMatrix, 0, mVMatrix, 0, msMatrix, 0);
         Matrix.multiplyMM(mFinalMatrix, 0, mProjectMatrix, 0, mFinalMatrix, 0);
         return mFinalMatrix;
     }

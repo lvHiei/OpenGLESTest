@@ -66,6 +66,20 @@
                 android:layout_gravity="center"
                 android:text="translateColorCube"/>
 
+            <Button
+                android:id="@+id/btn_rotateColorCube"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="rotateColorCube"/>
+
+            <Button
+                android:id="@+id/btn_scaleColorCube"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="scaleColorCube"/>
+
         </LinearLayout>
 
     </ScrollView>

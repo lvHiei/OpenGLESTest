@@ -16,6 +16,8 @@ import com.lvhiei.openglestest.render.CubeRender;
 import com.lvhiei.openglestest.render.FirstProgramRender;
 import com.lvhiei.openglestest.render.IGLESRenderer;
 import com.lvhiei.openglestest.render.MatrixUtil;
+import com.lvhiei.openglestest.render.RotateCubeRender;
+import com.lvhiei.openglestest.render.ScaleCubeRender;
 import com.lvhiei.openglestest.render.SquareRender;
 import com.lvhiei.openglestest.render.TranstateCubeRender;
 import com.lvhiei.openglestest.render.TriangleRender;
@@ -30,6 +32,8 @@ public class GLES20Activity extends Activity {
     private float mPreviousX = 0;
     private float mPreviousY = 0;
     private float mPreviousZ = 0;
+    private int mScaledCount = 0;
+    private boolean mbReduce = true;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -57,7 +61,23 @@ public class GLES20Activity extends Activity {
                 }
                 case MotionEvent.ACTION_DOWN:
                 {
+                    if(mRenderId == R.id.btn_rotateColorCube){
+                        MatrixUtil.setRotate(30, 0.0f, 1.0f, 0.0f);
+                        mSurfaceView.requestRender();
+                    }else if(mRenderId == R.id.btn_scaleColorCube){
+                        if(++mScaledCount % 5 == 0){
+                            mbReduce = !mbReduce;
+                        }
 
+                        float scalex = 0.8f;
+
+                        if(!mbReduce){
+                            scalex = (float) (1.0 / scalex);
+                        }
+
+                        MatrixUtil.setScale(scalex, scalex, scalex);
+                        mSurfaceView.requestRender();
+                    }
                     break;
                 }
             }
@@ -125,6 +145,14 @@ public class GLES20Activity extends Activity {
                 break;
             case R.id.btn_translateColorCube:
                 mRender = new TranstateCubeRender();
+//                mbLandScape = true;
+                break;
+            case R.id.btn_rotateColorCube:
+                mRender = new RotateCubeRender();
+//                mbLandScape = true;
+                break;
+            case R.id.btn_scaleColorCube:
+                mRender = new ScaleCubeRender();
 //                mbLandScape = true;
                 break;
             default:
