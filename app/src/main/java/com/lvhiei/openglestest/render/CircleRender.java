@@ -16,7 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 
-public class CircleRender implements IGLESRenderer{
+public class CircleRender extends BaseRender{
 
     private static final String vertex_shader = "\n" +
             "attribute vec4 a_Position;     \n" +
@@ -48,8 +48,8 @@ public class CircleRender implements IGLESRenderer{
     private final int nTriangleCount = 40;
 
     private FloatBuffer mVertexCoordinate;
-    private int mProgram;
     private float[] mProjectionMatrix = new float[16];
+    private int mMatrixLoc;
 
     public CircleRender(){
         x = 0.0f;
@@ -95,22 +95,9 @@ public class CircleRender implements IGLESRenderer{
     }
 
     @Override
-    public void setGLSurface(GLSurfaceView surface) {
-
-    }
-
-    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        projectionMatrix(width, height);
-
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
-        GLES20.glViewport(0, 0, width, height);
 //        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -121,8 +108,15 @@ public class CircleRender implements IGLESRenderer{
         int color_pos = GLES20.glGetUniformLocation(mProgram, "u_Color");
         GLES20.glUniform4f(color_pos, 0.0f, 1.0f, 0.0f, 1.0f);
 
-        int matrix_pos = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
-        GLES20.glUniformMatrix4fv(matrix_pos, 1, false, mProjectionMatrix, 0);
+        mMatrixLoc = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
+    }
+
+    @Override
+    public void onSurfaceChanged(GL10 gl, int width, int height) {
+        projectionMatrix(width, height);
+        GLES20.glViewport(0, 0, width, height);
+
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mProjectionMatrix, 0);
     }
 
     @Override

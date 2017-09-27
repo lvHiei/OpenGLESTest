@@ -9,4 +9,6 @@ import android.opengl.GLSurfaceView;
 
 public interface IGLESRenderer extends GLSurfaceView.Renderer {
     void setGLSurface(GLSurfaceView surface);
+    void onPause();
+    void onResume();
 }

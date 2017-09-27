@@ -181,12 +181,12 @@ public class GLES20Activity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mSurfaceView.onResume();
+        mRender.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSurfaceView.onPause();
+        mRender.onPause();
     }
 }

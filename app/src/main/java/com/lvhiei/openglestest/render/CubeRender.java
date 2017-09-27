@@ -16,7 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 
-public class CubeRender implements IGLESRenderer {
+public class CubeRender extends BaseRender {
 
     private static final String vertex_shader = "\n" +
             "attribute vec4 a_Position;     \n" +
@@ -95,11 +95,8 @@ public class CubeRender implements IGLESRenderer {
             1.0f, -1.0f, 1.0f,
     };
 
-
-
     protected FloatBuffer mVertexCoordinate;
-    protected int mProgram;
-
+    protected int mMatrixLoc;
 
     public CubeRender(){
         mVertexCoordinate = ByteBuffer.allocateDirect(vertices.length * 4)
@@ -142,22 +139,9 @@ public class CubeRender implements IGLESRenderer {
 
 
     @Override
-    public void setGLSurface(GLSurfaceView surface) {
-
-    }
-
-    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        projectFrustumMatrix(width, height);
-
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
-        GLES20.glViewport(0, 0, width, height);
 //        GLES20.glDepthRangef(20, 100);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
@@ -171,8 +155,15 @@ public class CubeRender implements IGLESRenderer {
         int color_pos = GLES20.glGetUniformLocation(mProgram, "u_Color");
         GLES20.glUniform4f(color_pos, 0.0f, 1.0f, 0.0f, 1.0f);
 
-        int matrix_pos = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
-        GLES20.glUniformMatrix4fv(matrix_pos, 1, false, MatrixUtil.getFinalMatrix(), 0);
+        mMatrixLoc = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
+    }
+
+    @Override
+    public void onSurfaceChanged(GL10 gl, int width, int height) {
+        projectFrustumMatrix(width, height);
+        GLES20.glViewport(0, 0, width, height);
+
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, MatrixUtil.getFinalMatrix(), 0);
     }
 
     @Override

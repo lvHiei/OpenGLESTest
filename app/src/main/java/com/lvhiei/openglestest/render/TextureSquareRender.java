@@ -17,7 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 
-public class TextureSquareRender implements IGLESRenderer{
+public class TextureSquareRender extends BaseRender{
 
     protected static final String vertex_shader = "\n" +
             "attribute vec4 a_Position;     \n" +
@@ -70,13 +70,12 @@ public class TextureSquareRender implements IGLESRenderer{
 
     private FloatBuffer mVertexCoordinate;
     private FloatBuffer mTextureCoordinate;
-    private int mProgram;
     private int mTextureId;
     private int mTextureLoc;
     private float[] mProjectionMatrix = new float[16];
 
     private Context mContext;
-
+    protected int mMatrixLoc;
 
     public TextureSquareRender(Context context){
         mContext = context;
@@ -121,22 +120,9 @@ public class TextureSquareRender implements IGLESRenderer{
 
 
     @Override
-    public void setGLSurface(GLSurfaceView surface) {
-
-    }
-
-    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        projectionMatrix(width, height);
-
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
-        GLES20.glViewport(0, 0, width, height);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         int apos_loc = GLES20.glGetAttribLocation(mProgram, "a_Position");
@@ -147,8 +133,7 @@ public class TextureSquareRender implements IGLESRenderer{
         GLES20.glVertexAttribPointer(atex_loc, 2, GLES20.GL_FLOAT, false, 0, mTextureCoordinate);
         GLES20.glEnableVertexAttribArray(atex_loc);
 
-        int matrix_pos = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
-        GLES20.glUniformMatrix4fv(matrix_pos, 1, false, mProjectionMatrix, 0);
+        mMatrixLoc = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
 
         mTextureLoc = GLES20.glGetUniformLocation(mProgram, "u_TextureUnit");
 
@@ -156,6 +141,13 @@ public class TextureSquareRender implements IGLESRenderer{
 //        mTextureId = OpenGLUtils.loadRepeatTexture(mContext, "hiei.bmp");
 //        mTextureId = OpenGLUtils.loadMirrorRepeatTexture(mContext, "hiei.bmp");
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+    }
+
+    @Override
+    public void onSurfaceChanged(GL10 gl, int width, int height) {
+        projectionMatrix(width, height);
+        GLES20.glViewport(0, 0, width, height);
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mProjectionMatrix, 0);
     }
 
     @Override
@@ -167,5 +159,14 @@ public class TextureSquareRender implements IGLESRenderer{
         GLES20.glUniform1f(mTextureLoc, 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 4);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+    }
+
+    @Override
+    protected void localReleaseGL() {
+        super.localReleaseGL();
+        if(0 != mTextureId){
+            OpenGLUtils.deleteTexture(mTextureId);
+            mTextureId = 0;
+        }
     }
 }

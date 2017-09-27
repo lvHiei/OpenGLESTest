@@ -17,7 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 
-public class BallRender implements IGLESRenderer{
+public class BallRender extends BaseRender{
 
     protected static final String vertex_shader = "\n" +
             "attribute vec4 a_Position;     \n" +
@@ -67,7 +67,6 @@ public class BallRender implements IGLESRenderer{
     // 数组中每个顶点的坐标数
     private static final int COORDS_PER_VERTEX = 3;
 
-    protected int mProgram;
     protected int mMatrixLoc = -1;
 
 
@@ -187,35 +186,28 @@ public class BallRender implements IGLESRenderer{
 
 
     @Override
-    public void setGLSurface(GLSurfaceView surface) {
-
-    }
-
-    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        projectFrustumMatrix(width, height);
-
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
-        GLES20.glViewport(0, 0, width, height);
 //        GLES20.glDepthRangef(20, 100);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
 //        //打开背面剪裁
 //        GLES20.glEnable(GLES20.GL_CULL_FACE);
 
         int apos_loc = GLES20.glGetAttribLocation(mProgram, "a_Position");
         GLES20.glVertexAttribPointer(apos_loc, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, 0, mVertexCoordinate);
         GLES20.glEnableVertexAttribArray(apos_loc);
-
         mMatrixLoc = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
-        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, MatrixUtil.getFinalMatrix(), 0);
+    }
 
+    @Override
+    public void onSurfaceChanged(GL10 gl, int width, int height) {
+        projectFrustumMatrix(width, height);
+        GLES20.glViewport(0, 0, width, height);
+
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, MatrixUtil.getFinalMatrix(), 0);
     }
 
     @Override

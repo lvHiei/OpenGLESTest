@@ -11,7 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 
-public class FirstProgramRender implements IGLESRenderer {
+public class FirstProgramRender extends BaseRender {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -27,10 +27,5 @@ public class FirstProgramRender implements IGLESRenderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-    }
-
-    @Override
-    public void setGLSurface(GLSurfaceView surface) {
-
     }
 }

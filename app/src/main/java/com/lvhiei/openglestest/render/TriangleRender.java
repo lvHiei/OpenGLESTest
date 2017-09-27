@@ -15,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 
-public class TriangleRender implements IGLESRenderer{
+public class TriangleRender extends BaseRender{
 
     private static final String vertex_shader = "\n" +
             "attribute vec4 a_Position;     \n" +
@@ -51,7 +51,6 @@ public class TriangleRender implements IGLESRenderer{
 
 
     private FloatBuffer mVertexCoordinate;
-    private int mProgram;
 
     public TriangleRender(){
         mVertexCoordinate = ByteBuffer.allocateDirect(trianglePoints.length * 4)
@@ -62,22 +61,10 @@ public class TriangleRender implements IGLESRenderer{
         mVertexCoordinate.position(0);
     }
 
-
-    @Override
-    public void setGLSurface(GLSurfaceView surface) {
-
-    }
-
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-    }
-
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
-        GLES20.glViewport(0, 0, width, height);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         int apos_loc = GLES20.glGetAttribLocation(mProgram, "a_Position");
@@ -86,6 +73,12 @@ public class TriangleRender implements IGLESRenderer{
 
         int color_pos = GLES20.glGetUniformLocation(mProgram, "u_Color");
         GLES20.glUniform4f(color_pos, 0.0f, 1.0f, 0.0f, 1.0f);
+    }
+
+    @Override
+    public void onSurfaceChanged(GL10 gl, int width, int height) {
+        GLES20.glViewport(0, 0, width, height);
+
     }
 
     @Override
