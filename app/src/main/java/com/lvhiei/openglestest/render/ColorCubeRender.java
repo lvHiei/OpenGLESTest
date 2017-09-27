@@ -15,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class ColorCubeRender extends CubeRender{
 
-    private static final String vertex_shader = "\n" +
+    protected static final String vertex_shader = "\n" +
             "attribute vec4 a_Position;     \n" +
             "attribute vec4 a_Color;     \n" +
             "varying  vec4 v_Color;     \n" +
@@ -29,7 +29,7 @@ public class ColorCubeRender extends CubeRender{
 
 
 
-    private static final String frag_shader = "\n" +
+    protected static final String frag_shader = "\n" +
             "precision mediump float;   \n" +
             "                                          \n" +
             "varying vec4 v_Color;                                 \n" +
@@ -138,7 +138,7 @@ public class ColorCubeRender extends CubeRender{
 //            0.0f, 1.0f, 1.0f, 0.0f,
     };
 
-    FloatBuffer mColorBuffer;
+    protected FloatBuffer mColorBuffer;
 
     public ColorCubeRender(){
         super();
