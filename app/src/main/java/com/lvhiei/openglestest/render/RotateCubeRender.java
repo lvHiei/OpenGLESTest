@@ -13,7 +13,7 @@ public class RotateCubeRender extends ColorCubeRender {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, MatrixUtil.getRotateFinalMatrix(), 0);
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getRotateFinalMatrix(), 0);
 
         super.onDrawFrame(gl);
     }

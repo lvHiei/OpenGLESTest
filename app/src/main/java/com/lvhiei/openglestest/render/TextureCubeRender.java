@@ -152,7 +152,7 @@ public class TextureCubeRender extends CubeRender {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
         GLES20.glUniform1f(mTextureLoc, 0);
-        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, MatrixUtil.getFinalMatrix(), 0);
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
 
         super.onDrawFrame(gl);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);

@@ -129,12 +129,12 @@ public class CubeRender extends BaseRender {
 
 
         if(width > height){
-            MatrixUtil.setProjectFrustum(-aspectRatio, aspectRatio, -1.0f, 1.0f, near, far);
+            mMatrixUtil.setProjectFrustum(-aspectRatio, aspectRatio, -1.0f, 1.0f, near, far);
         }else{
-            MatrixUtil.setProjectFrustum(-1.0f, 1.0f, -aspectRatio, aspectRatio, near, far);
+            mMatrixUtil.setProjectFrustum(-1.0f, 1.0f, -aspectRatio, aspectRatio, near, far);
         }
 
-        MatrixUtil.setCamera(cx, cy, cz, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        mMatrixUtil.setCamera(cx, cy, cz, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
     }
 
 
@@ -162,7 +162,7 @@ public class CubeRender extends BaseRender {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         super.onSurfaceChanged(gl, width, height);
         projectFrustumMatrix(width, height);
-        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, MatrixUtil.getFinalMatrix(), 0);
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
     }
 
     @Override

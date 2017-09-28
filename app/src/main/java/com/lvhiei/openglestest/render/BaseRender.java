@@ -16,6 +16,8 @@ public class BaseRender implements IGLESRenderer {
 
     protected int mProgram = 0;
 
+    protected MatrixUtil mMatrixUtil = new MatrixUtil();
+
     @Override
     public void setGLSurface(GLSurfaceView surface) {
         mSurfaceView = surface;
@@ -58,5 +60,9 @@ public class BaseRender implements IGLESRenderer {
 
     protected void localReleaseGL(){
 
+    }
+
+    public MatrixUtil getMatrixUtil(){
+        return mMatrixUtil;
     }
 }

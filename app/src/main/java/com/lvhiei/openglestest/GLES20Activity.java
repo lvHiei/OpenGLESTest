@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.lvhiei.openglestest.render.BallRender;
+import com.lvhiei.openglestest.render.BaseRender;
 import com.lvhiei.openglestest.render.CircleRender;
 import com.lvhiei.openglestest.render.ColorCubeRender;
 import com.lvhiei.openglestest.render.CubeRender;
@@ -30,7 +31,7 @@ public class GLES20Activity extends Activity {
 
     private int mRenderId;
     private GLSurfaceView mSurfaceView;
-    private IGLESRenderer mRender;
+    private BaseRender mRender;
     private boolean mbLandScape;
 
     private float mPreviousX = 0;
@@ -57,8 +58,8 @@ public class GLES20Activity extends Activity {
                         mPreviousX = x;
                         mPreviousY = y;
 
-                        MatrixUtil.setTranstate(0.0f, ty, 0.0f);
-//                        MatrixUtil.setTranstate(0.0f, 0.0f, ty);
+                        mRender.getMatrixUtil().setTranstate(0.0f, ty, 0.0f);
+//                        mRender.getMatrixUtil().setTranstate(0.0f, 0.0f, ty);
                         mSurfaceView.requestRender();
                     }
                     break;
@@ -66,7 +67,7 @@ public class GLES20Activity extends Activity {
                 case MotionEvent.ACTION_DOWN:
                 {
                     if(mRenderId == R.id.btn_rotateColorCube){
-                        MatrixUtil.setRotate(30, 0.0f, 1.0f, 0.0f);
+                        mRender.getMatrixUtil().setRotate(30, 0.0f, 1.0f, 0.0f);
                         mSurfaceView.requestRender();
                     }else if(mRenderId == R.id.btn_scaleColorCube){
                         if(++mScaledCount % 5 == 0){
@@ -79,17 +80,17 @@ public class GLES20Activity extends Activity {
                             scalex = (float) (1.0 / scalex);
                         }
 
-                        MatrixUtil.setScale(scalex, scalex, scalex);
-                        MatrixUtil.setRotate(30f, 0.0f, 1.0f, 0.0f);
+                        mRender.getMatrixUtil().setScale(scalex, scalex, scalex);
+                        mRender.getMatrixUtil().setRotate(30f, 0.0f, 1.0f, 0.0f);
                         mSurfaceView.requestRender();
                     }else if(mRenderId == R.id.btn_drawBall){
-                        MatrixUtil.setRotate(30, 0.0f, 1.0f, 0.0f);
+                        mRender.getMatrixUtil().setRotate(30, 0.0f, 1.0f, 0.0f);
                         mSurfaceView.requestRender();
                     }else if(mRenderId == R.id.btn_textureCube){
-                        MatrixUtil.setRotate(30, 0.0f, 1.0f, 0.0f);
+                        mRender.getMatrixUtil().setRotate(30, 0.0f, 1.0f, 0.0f);
                         mSurfaceView.requestRender();
                     }else if(mRenderId == R.id.btn_textureBall){
-                        MatrixUtil.setRotate(30, 0.0f, 1.0f, 0.0f);
+                        mRender.getMatrixUtil().setRotate(30, 0.0f, 1.0f, 0.0f);
                         mSurfaceView.requestRender();
                     }
                     break;
@@ -131,8 +132,6 @@ public class GLES20Activity extends Activity {
         mSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         mRender.setGLSurface(mSurfaceView);
         mSurfaceView.setOnTouchListener(mTouchListener);
-
-        MatrixUtil.initTRS();
     }
 
 
