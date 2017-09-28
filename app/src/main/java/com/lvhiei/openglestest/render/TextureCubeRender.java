@@ -40,9 +40,6 @@ public class TextureCubeRender extends CubeRender {
             "void main()                           \n" +
             "{                                 \n" +
             "    gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);                                           \n" +
-            "    if(gl_FragColor == vec4(0.0,0.0,0.0,1.0)){" +
-            "        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n" +
-            "    }                                           \n" +
             "}";
 
     // draw triangle fan

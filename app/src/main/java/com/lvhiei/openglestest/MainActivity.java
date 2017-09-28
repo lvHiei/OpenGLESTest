@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_drawBall).setOnClickListener(mListener);
         findViewById(R.id.btn_textureSquare).setOnClickListener(mListener);
         findViewById(R.id.btn_textureCube).setOnClickListener(mListener);
+        findViewById(R.id.btn_textureBall).setOnClickListener(mListener);
     }
 
 
