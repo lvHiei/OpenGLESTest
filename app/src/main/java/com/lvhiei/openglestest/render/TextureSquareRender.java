@@ -145,8 +145,8 @@ public class TextureSquareRender extends BaseRender{
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
+        super.onSurfaceChanged(gl, width, height);
         projectionMatrix(width, height);
-        GLES20.glViewport(0, 0, width, height);
         GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mProjectionMatrix, 0);
     }
 

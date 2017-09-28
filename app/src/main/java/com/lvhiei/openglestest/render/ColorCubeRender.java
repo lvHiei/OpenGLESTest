@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -152,13 +153,9 @@ public class ColorCubeRender extends CubeRender{
     }
 
     @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        projectFrustumMatrix(width, height);
-
-
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
-        GLES20.glViewport(0, 0, width, height);
 //        GLES20.glDepthRangef(20, 100);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
@@ -171,8 +168,7 @@ public class ColorCubeRender extends CubeRender{
         GLES20.glVertexAttribPointer(color_pos, 4, GLES20.GL_FLOAT, false, 0, mColorBuffer);
         GLES20.glEnableVertexAttribArray(color_pos);
 
-        int matrix_pos = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
-        GLES20.glUniformMatrix4fv(matrix_pos, 1, false, MatrixUtil.getFinalMatrix(), 0);
+        mMatrixLoc = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
     }
 
 }

@@ -13,8 +13,7 @@ public class ScaleCubeRender extends ColorCubeRender {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        int matrix_pos = GLES20.glGetUniformLocation(mProgram, "u_Matrix");
-        GLES20.glUniformMatrix4fv(matrix_pos, 1, false, MatrixUtil.getScaleFinalMatrix(), 0);
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, MatrixUtil.getScaleFinalMatrix(), 0);
 
         super.onDrawFrame(gl);
     }

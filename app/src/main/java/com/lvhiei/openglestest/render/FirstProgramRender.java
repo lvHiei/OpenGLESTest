@@ -14,13 +14,8 @@ import javax.microedition.khronos.opengles.GL10;
 public class FirstProgramRender extends BaseRender {
 
     @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-    }
-
-    @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
+        super.onSurfaceChanged(gl, width, height);
         GLES20.glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
     }
 
