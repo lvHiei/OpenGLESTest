@@ -20,6 +20,7 @@ import com.lvhiei.openglestest.render.MatrixUtil;
 import com.lvhiei.openglestest.render.RotateCubeRender;
 import com.lvhiei.openglestest.render.ScaleCubeRender;
 import com.lvhiei.openglestest.render.SquareRender;
+import com.lvhiei.openglestest.render.TextureCubeRender;
 import com.lvhiei.openglestest.render.TextureSquareRender;
 import com.lvhiei.openglestest.render.TranstateCubeRender;
 import com.lvhiei.openglestest.render.TriangleRender;
@@ -82,6 +83,10 @@ public class GLES20Activity extends Activity {
                         mSurfaceView.requestRender();
                     }else if(mRenderId == R.id.btn_drawBall){
                         MatrixUtil.setRotate(30, 0.0f, 1.0f, 0.0f);
+                        mSurfaceView.requestRender();
+                    }else if(mRenderId == R.id.btn_textureCube){
+                        MatrixUtil.setRotate(30, 0.0f, 1.0f, 0.0f);
+//                        MatrixUtil.setRotate(30, 1.0f, 0.0f, 0.0f);
                         mSurfaceView.requestRender();
                     }
                     break;
@@ -170,6 +175,10 @@ public class GLES20Activity extends Activity {
 
             case R.id.btn_textureSquare:
                 mRender = new TextureSquareRender(this);
+//                mbLandScape = true;
+                break;
+            case R.id.btn_textureCube:
+                mRender = new TextureCubeRender(this);
 //                mbLandScape = true;
                 break;
             default:

@@ -3,6 +3,8 @@ package com.lvhiei.openglestest.render;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -13,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 
-public class TextureCubeRender extends BaseRender {
+public class TextureCubeRender extends CubeRender {
 
     private static final String vertex_shader = "\n" +
             "attribute vec4 a_Position;     \n" +
@@ -38,22 +40,85 @@ public class TextureCubeRender extends BaseRender {
             "void main()                           \n" +
             "{                                 \n" +
             "    gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);                                           \n" +
+            "    if(gl_FragColor == vec4(0.0,0.0,0.0,1.0)){" +
+            "        gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n" +
+            "    }                                           \n" +
             "}";
 
+    // draw triangle fan
+    protected final float[] textureCoordinate = {
+            // front z is 1.0f
+            0.5f, 0.5f,
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+
+            // back z is -1.0f
+            0.5f, 0.5f,
+            1.0f, 0.0f,
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+            // left x is -1.0f
+
+            0.5f, 0.5f,
+            1.0f, 0.0f,
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+
+            // right x is 1.0f
+            0.5f, 0.5f,
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+
+            // up y is 1.0f
+            0.5f, 0.5f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+
+            // down y is -1.0f
+            0.5f, 0.5f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+    };
 
 
-
-    private FloatBuffer mVertexCoordinate;
     private FloatBuffer mTextureCoordinate;
     private int mTextureId;
     private int mTextureLoc;
-    private float[] mProjectionMatrix = new float[16];
 
     private Context mContext;
-    protected int mMatrixLoc;
+
+
 
     public TextureCubeRender(Context context){
+        super();
         mContext = context;
+        initCoordinate();
+    }
+
+    private void initCoordinate(){
+        mTextureCoordinate = ByteBuffer.allocateDirect(textureCoordinate.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+
+        mTextureCoordinate.put(textureCoordinate);
+        mTextureCoordinate.position(0);
     }
 
 
@@ -62,9 +127,10 @@ public class TextureCubeRender extends BaseRender {
         mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
         GLES20.glUseProgram(mProgram);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
         int apos_loc = GLES20.glGetAttribLocation(mProgram, "a_Position");
-        GLES20.glVertexAttribPointer(apos_loc, 2, GLES20.GL_FLOAT, false, 0, mVertexCoordinate);
+        GLES20.glVertexAttribPointer(apos_loc, 3, GLES20.GL_FLOAT, false, 0, mVertexCoordinate);
         GLES20.glEnableVertexAttribArray(apos_loc);
 
         int atex_loc = GLES20.glGetAttribLocation(mProgram, "a_TextureCoordinates");
@@ -86,12 +152,23 @@ public class TextureCubeRender extends BaseRender {
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
+        GLES20.glUniform1f(mTextureLoc, 0);
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, MatrixUtil.getFinalMatrix(), 0);
+
         super.onDrawFrame(gl);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
     @Override
     protected void localReleaseGL() {
         super.localReleaseGL();
+
+        if(0 != mTextureId){
+            OpenGLUtils.deleteTexture(mTextureId);
+            mTextureId = 0;
+        }
     }
 
 
