@@ -146,33 +146,49 @@ public class SunRender extends BaseRender{
             "}    "
         ;
 
+    public class Point{
+        public Point(float x, float y, float z){
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public float x;
+        public float y;
+        public float z;
+    }
+
 
     protected static final float UNIT_SIZE = 1.0f;// 单位尺寸
     protected final int angleSpan = 10;// 将球进行单位切分的角度
     protected FloatBuffer mVertexCoordinate;// 顶点坐标
     // 数组中每个顶点的坐标数
     protected static final int COORDS_PER_VERTEX = 3;
+    protected static final int COORDS_PER_TEXCOORD = 2;
 
 
-    protected float sun_r = 0.4f;
-    protected float earth_r = 0.1f;
-    protected float moon_r = 0.05f;
+    protected float sun_r = 0.6f;       // 太阳半径
+    protected float earth_r = 0.15f;    // 地球半径
+    protected float moon_r = 0.05f;     // 月亮半径
 
-    protected int sun_vCount = 0;
-    protected int earth_vCount = 0;
-    protected int moon_vCount = 0;
-    protected int vCount = 0;// 顶点个数，先初始化为0
+    protected float distance_se = 1.5f; // 地球中心距离太阳中心距离
+    protected float distance_em = 0.3f; // 月球中心距离地球中心距离
 
-    protected int sun_tCount = 0;
-    protected int earth_tCount = 0;
-    protected int moon_tCount = 0;
-    protected int tCount = 0;// 纹理顶点个数，先初始化为0
+    protected int sun_vCount = 0;       // 太阳顶点个数
+    protected int earth_vCount = 0;     // 地球顶点个数
+    protected int moon_vCount = 0;      // 月亮顶点个数
+    protected int vCount = 0;           // 顶点个数，先初始化为0
 
-    private FloatBuffer mTextureCoordinate;
+    protected int sun_tCount = 0;       // 太阳纹理坐标个数
+    protected int earth_tCount = 0;     // 地球纹理坐标个数
+    protected int moon_tCount = 0;      // 月亮纹理坐标个数
+    protected int tCount = 0;           // 纹理顶点个数，先初始化为0
 
-    private int mSunTextureId;
-    private int mEarthTextureId;
-    private int mMoonTextureId;
+    private FloatBuffer mTextureCoordinate;     // 纹理坐标
+
+    private int mSunTextureId;                  // 太阳纹理id
+    private int mEarthTextureId;                // 地球纹理id
+    private int mMoonTextureId;                 // 月亮纹理id
 
     private int mSunTextureLoc;
     private int mEarthTextureLoc;
@@ -187,19 +203,29 @@ public class SunRender extends BaseRender{
     private int mMoonRLoc = -1;
 
 
-    protected MatrixUtil mSunMatrix;
-    protected MatrixUtil mEarthMatrix;
-    protected MatrixUtil mMoonMatrix;
+    protected MatrixUtil mSunMatrix;            // 太阳转换矩阵
+    protected MatrixUtil mEarthMatrix;          // 地球转换矩阵
+    protected MatrixUtil mMoonMatrix;           // 月亮转换矩阵
 
-    private ArrayList<Float> mSunAlVertix = new ArrayList<>();
-    private ArrayList<Float> mEarthAlVertix = new ArrayList<>();
-    private ArrayList<Float> mMoonAlVertix = new ArrayList<>();
+    private ArrayList<Float> mSunAlVertix = new ArrayList<>();      //太阳顶点
+    private ArrayList<Float> mEarthAlVertix = new ArrayList<>();    // 地球顶点
+    private ArrayList<Float> mMoonAlVertix = new ArrayList<>();     // 月球顶点
 
-    private ArrayList<Float> mSunAlTexCoord = new ArrayList<>();
-    private ArrayList<Float> mEarthAlTexCoord = new ArrayList<>();
-    private ArrayList<Float> mMoonAlTexCoord = new ArrayList<>();
+    private ArrayList<Float> mSunAlTexCoord = new ArrayList<>();    // 太阳纹理坐标
+    private ArrayList<Float> mEarthAlTexCoord = new ArrayList<>();  // 地球纹理坐标
+    private ArrayList<Float> mMoonAlTexCoord = new ArrayList<>();   // 月亮纹理坐标
 
     protected Context mContext;
+
+    protected ArrayList<Point> mEarthTrack = new ArrayList<>();    // 地球公转运行轨迹
+    protected ArrayList<Point> mMonnTrack = new ArrayList<>();     // 月球公转运行轨迹
+
+    protected final int nTriangleCount = 40;                       // 轨迹的三角个数
+
+    protected final int mEarthTrackIdx = 0; // 地球公转轨迹索引
+    protected final int mMoonTrackIdx = 0;  // 月亮公转轨迹索引
+
+
 
 
     public SunRender(Context context) {
@@ -211,7 +237,45 @@ public class SunRender extends BaseRender{
         mMoonMatrix = new MatrixUtil();
 
         initAllCoordinate();
+
+        initAllTracks();
     }
+
+    protected void initAllTracks(){
+
+        // 顶点的个数，我们分割count个三角形，有count+1个点，再加上圆心共有count+2个点
+        final int nodeCount = nTriangleCount + 2;
+        // x y
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+
+        //初始化地球公转轨迹
+//        mEarthTrack.add(x);// 中心点
+//        mEarthTrack.add(y);
+//        mEarthTrack.add(z);
+        initTracks(x, y, z, distance_se, mEarthTrack);
+
+        //初始化月亮公转轨迹
+//        mMonnTrack.add(x);// 中心点
+//        mMonnTrack.add(y);
+//        mMonnTrack.add(z);
+        initTracks(x, y, z, distance_em, mMonnTrack);
+    }
+
+    protected void initTracks(float x, float y, float z, float r, ArrayList<Point> track){
+        // 轨迹在xz平面
+        for (int i = 0; i < nTriangleCount + 1; i++) {
+            float angleInRadians = ((float) i / (float) nTriangleCount)
+                    * ((float) Math.PI * 2f);
+            float tx = x + r * (float)Math.cos(angleInRadians);
+            float ty = y;
+            float tz = z + r * (float)Math.sin(angleInRadians);
+            track.add(new Point(tx, ty, tz));
+        }
+
+    }
+
 
     protected void initCoordinate(float r, ArrayList<Float> alVertix, ArrayList<Float> alTextureCoord){
 
@@ -337,14 +401,14 @@ public class SunRender extends BaseRender{
         mVertexCoordinate.put(vertices);
         mVertexCoordinate.position(0);
 
-        sun_tCount = mSunAlTexCoord.size() / COORDS_PER_VERTEX;// 顶点的数量
-        earth_tCount = mEarthAlTexCoord.size() / COORDS_PER_VERTEX;// 顶点的数量
-        moon_tCount = mMoonAlTexCoord.size() / COORDS_PER_VERTEX;// 顶点的数量
+        sun_tCount = mSunAlTexCoord.size() / COORDS_PER_TEXCOORD;// 顶点的数量
+        earth_tCount = mEarthAlTexCoord.size() / COORDS_PER_TEXCOORD;// 顶点的数量
+        moon_tCount = mMoonAlTexCoord.size() / COORDS_PER_TEXCOORD;// 顶点的数量
 
         tCount = sun_tCount + earth_tCount + moon_tCount;
 
 
-        float[] textures = new float[tCount * COORDS_PER_VERTEX];
+        float[] textures = new float[tCount * COORDS_PER_TEXCOORD];
 
 
         offset = 0;
@@ -446,8 +510,7 @@ public class SunRender extends BaseRender{
         projectFrustumMatrix(mEarthMatrix, width, height);
         projectFrustumMatrix(mMoonMatrix, width, height);
 
-        mEarthMatrix.setTranstate(0.7f, 0.0f, 0.0f);
-        mMoonMatrix.setTranstate(1.0f, 0.0f, 0.0f);
+        setTranslate();
 
         GLES20.glUniformMatrix4fv(mSunMatrixLoc, 1, false, mSunMatrix.getFinalMatrix(), 0);
         GLES20.glUniformMatrix4fv(mEarthMatrixLoc, 1, false, mEarthMatrix.getFinalMatrix(), 0);
@@ -504,5 +567,13 @@ public class SunRender extends BaseRender{
             OpenGLUtils.deleteTexture(mMoonTextureId);
             mMoonTextureId = 0;
         }
+    }
+
+    protected void setTranslate(){
+        Point pe = mEarthTrack.get(mEarthTrackIdx);
+        Point pm = mMonnTrack.get(mMoonTrackIdx);
+
+        mEarthMatrix.setTranstate(pe.x, pe.y, pe.z);
+        mMoonMatrix.setTranstate(pe.x + pm.x, pe.y + pm.y, pe.z + pm.z);
     }
 }
