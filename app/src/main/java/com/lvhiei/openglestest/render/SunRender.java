@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.RunnableFuture;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -147,10 +149,34 @@ public class SunRender extends BaseRender{
         ;
 
     public class Point{
+        public Point(Point p){
+            this.x = p.x;
+            this.y = p.y;
+            this.z = p.z;
+        }
+
         public Point(float x, float y, float z){
             this.x = x;
             this.y = y;
             this.z = z;
+        }
+
+        public void add(Point p){
+            this.x += p.x;
+            this.y += p.y;
+            this.z += p.z;
+        }
+
+        public void minus(Point p){
+            this.x -= p.x;
+            this.y -= p.y;
+            this.z -= p.z;
+        }
+
+        public void cp(Point p){
+            this.x = p.x;
+            this.y = p.y;
+            this.z = p.z;
         }
 
         public float x;
@@ -222,10 +248,36 @@ public class SunRender extends BaseRender{
 
     protected final int nTriangleCount = 40;                       // 轨迹的三角个数
 
-    protected final int mEarthTrackIdx = 0; // 地球公转轨迹索引
-    protected final int mMoonTrackIdx = 0;  // 月亮公转轨迹索引
+    protected int mEarthTrackIdx = 0; // 地球公转轨迹索引
+    protected int mMoonTrackIdx = 0;  // 月亮公转轨迹索引
 
 
+    protected Object mLock = new Object();
+    protected boolean mWantStop = false;
+    protected int mDrawSep = 40;
+    protected int mDrawCount = 0;
+    protected Point lastEarthPoint = null;
+    protected Point lastMoonPoint = null;
+
+
+    protected boolean mbStartedDraw = false;
+
+    protected Thread mRendererThread;
+    protected Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            synchronized (mLock){
+                while (!mWantStop){
+                    try {
+                        draw();
+                        mLock.wait(mDrawSep);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    };
 
 
     public SunRender(Context context) {
@@ -510,7 +562,7 @@ public class SunRender extends BaseRender{
         projectFrustumMatrix(mEarthMatrix, width, height);
         projectFrustumMatrix(mMoonMatrix, width, height);
 
-        setTranslate();
+//        setTranslate();
 
         GLES20.glUniformMatrix4fv(mSunMatrixLoc, 1, false, mSunMatrix.getFinalMatrix(), 0);
         GLES20.glUniformMatrix4fv(mEarthMatrixLoc, 1, false, mEarthMatrix.getFinalMatrix(), 0);
@@ -520,6 +572,8 @@ public class SunRender extends BaseRender{
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
+
+        setTranslate();
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mSunTextureId);
@@ -547,6 +601,8 @@ public class SunRender extends BaseRender{
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, start, moon_vCount);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+
+        mbStartedDraw = true;
     }
 
     @Override
@@ -569,11 +625,67 @@ public class SunRender extends BaseRender{
         }
     }
 
-    protected void setTranslate(){
-        Point pe = mEarthTrack.get(mEarthTrackIdx);
-        Point pm = mMonnTrack.get(mMoonTrackIdx);
+    @Override
+    public void onPause() {
+        mWantStop = true;
+        synchronized (mLock){
+            mLock.notify();
+        }
 
-        mEarthMatrix.setTranstate(pe.x, pe.y, pe.z);
-        mMoonMatrix.setTranstate(pe.x + pm.x, pe.y + pm.y, pe.z + pm.z);
+        try {
+            mRendererThread.join();
+            mRendererThread = null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mbStartedDraw = false;
+
+        if(null == mRendererThread){
+            mWantStop = false;
+            mRendererThread = new Thread(mRunnable);
+            mRendererThread.start();
+        }
+    }
+
+    protected void setTranslate(){
+        Point pe = new Point(mEarthTrack.get(mEarthTrackIdx));
+        Point pm = new Point(mMonnTrack.get(mMoonTrackIdx));
+
+        pm.add(pe);
+        Point spe = new Point(pe);
+        Point spm = new Point(pm);
+
+        if(lastEarthPoint != null){
+            spe.minus(lastEarthPoint);
+        }
+        if(lastMoonPoint != null){
+            spm.minus(lastMoonPoint);
+        }
+
+        mEarthMatrix.setTranstate(spe.x, spe.y, spe.z);
+        mMoonMatrix.setTranstate(spm.x, spm.y, spm.z);
+
+        ++mDrawCount;
+        lastEarthPoint = pe;
+        lastMoonPoint = pm;
+    }
+
+    protected void draw(){
+        if(!mbStartedDraw){
+            return;
+        }
+
+        mEarthTrackIdx = (mDrawCount / 5) % mEarthTrack.size();
+        mMoonTrackIdx = mDrawCount % mMonnTrack.size();
+
+        if(null != mSurfaceView){
+            mSurfaceView.requestRender();
+        }
     }
 }
