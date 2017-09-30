@@ -246,7 +246,11 @@ public class SunRender extends BaseRender{
     protected ArrayList<Point> mEarthTrack = new ArrayList<>();    // 地球公转运行轨迹
     protected ArrayList<Point> mMonnTrack = new ArrayList<>();     // 月球公转运行轨迹
 
-    protected final int nTriangleCount = 40;                       // 轨迹的三角个数
+    protected final int neTriangleCount = 3000;                       // 地球公转轨迹的三角个数
+    protected final int nmTriangleCount = 250;                       // 月亮公转轨迹的三角个数
+//
+//    protected final int neTriangleCount = 300;                       // 地球公转轨迹的三角个数
+//    protected final int nmTriangleCount = 25;                       // 月亮公转轨迹的三角个数
 
     protected int mEarthTrackIdx = 0; // 地球公转轨迹索引
     protected int mMoonTrackIdx = 0;  // 月亮公转轨迹索引
@@ -254,7 +258,7 @@ public class SunRender extends BaseRender{
 
     protected Object mLock = new Object();
     protected boolean mWantStop = false;
-    protected int mDrawSep = 40;
+    protected int mDrawSep = 20;
     protected int mDrawCount = 0;
     protected Point lastEarthPoint = null;
     protected Point lastMoonPoint = null;
@@ -294,31 +298,22 @@ public class SunRender extends BaseRender{
     }
 
     protected void initAllTracks(){
-
-        // 顶点的个数，我们分割count个三角形，有count+1个点，再加上圆心共有count+2个点
-        final int nodeCount = nTriangleCount + 2;
         // x y
         float x = 0.0f;
         float y = 0.0f;
         float z = 0.0f;
 
         //初始化地球公转轨迹
-//        mEarthTrack.add(x);// 中心点
-//        mEarthTrack.add(y);
-//        mEarthTrack.add(z);
-        initTracks(x, y, z, distance_se, mEarthTrack);
+        initTracks(x, y, z, distance_se, mEarthTrack, neTriangleCount);
 
         //初始化月亮公转轨迹
-//        mMonnTrack.add(x);// 中心点
-//        mMonnTrack.add(y);
-//        mMonnTrack.add(z);
-        initTracks(x, y, z, distance_em, mMonnTrack);
+        initTracks(x, y, z, distance_em, mMonnTrack, nmTriangleCount);
     }
 
-    protected void initTracks(float x, float y, float z, float r, ArrayList<Point> track){
+    protected void initTracks(float x, float y, float z, float r, ArrayList<Point> track, int triangleCount){
         // 轨迹在xz平面
-        for (int i = 0; i < nTriangleCount + 1; i++) {
-            float angleInRadians = ((float) i / (float) nTriangleCount)
+        for (int i = 0; i < triangleCount + 1; i++) {
+            float angleInRadians = ((float) i / (float) triangleCount)
                     * ((float) Math.PI * 2f);
             float tx = x + r * (float)Math.cos(angleInRadians);
             float ty = y;
@@ -681,7 +676,7 @@ public class SunRender extends BaseRender{
             return;
         }
 
-        mEarthTrackIdx = (mDrawCount / 5) % mEarthTrack.size();
+        mEarthTrackIdx = (mDrawCount) % mEarthTrack.size();
         mMoonTrackIdx = mDrawCount % mMonnTrack.size();
 
         if(null != mSurfaceView){
