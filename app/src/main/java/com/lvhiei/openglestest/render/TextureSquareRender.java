@@ -156,7 +156,7 @@ public class TextureSquareRender extends BaseRender{
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
-        GLES20.glUniform1f(mTextureLoc, 0);
+        GLES20.glUniform1i(mTextureLoc, 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 4);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }

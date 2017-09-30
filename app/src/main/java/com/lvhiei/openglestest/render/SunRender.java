@@ -133,7 +133,7 @@ public class SunRender extends BaseRender{
             "{   \n" +
             "    if(isSun(v_Position.xyz))\n" +
             "    {\n" +
-            "        gl_FragColor = texture2D(u_moonTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "        gl_FragColor = texture2D(u_sunTextureUnit, v_TextureCoordinates);                                                        \n" +
             "    }\n" +
             "    else if(isEarth(v_Position.xyz))\n" +
             "    {\n" +
@@ -460,15 +460,15 @@ public class SunRender extends BaseRender{
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mSunTextureId);
-        GLES20.glUniform1f(mSunTextureLoc, 0);
+        GLES20.glUniform1i(mSunTextureLoc, 0);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mEarthTextureId);
-        GLES20.glUniform1f(mEarthTextureLoc, 1);
+        GLES20.glUniform1i(mEarthTextureLoc, 1);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE2);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mMoonTextureId);
-        GLES20.glUniform1f(mMoonTextureLoc, 2);
+        GLES20.glUniform1i(mMoonTextureLoc, 2);
 
         GLES20.glUniformMatrix4fv(mSunMatrixLoc, 1, false, mSunMatrix.getFinalMatrix(), 0);
         GLES20.glUniformMatrix4fv(mEarthMatrixLoc, 1, false, mEarthMatrix.getFinalMatrix(), 0);
