@@ -26,6 +26,10 @@ public class MatrixUtil {
         Matrix.setIdentityM(msMatrix, 0);
     }
 
+    public void initTranslate(){
+        Matrix.setIdentityM(mtMatrix, 0);
+    }
+
     // 设置摄像头位置 c[xyz] 摄像头位置 t[xyz] 目标点位置 up[xyz] 摄像头up向量
     public void setCamera(float cx, float cy, float cz,
                                  float tx, float ty, float tz,
@@ -97,8 +101,9 @@ public class MatrixUtil {
     }
 
     public float[] getFinalMatrix(){
-        Matrix.multiplyMM(mFinalMatrix, 0, mrMatrix, 0, mtMatrix, 0);
-        Matrix.multiplyMM(mFinalMatrix, 0, msMatrix, 0, mFinalMatrix, 0);
+        // 先旋转 在缩放 在平移
+        Matrix.multiplyMM(mFinalMatrix, 0, msMatrix, 0, mrMatrix, 0);
+        Matrix.multiplyMM(mFinalMatrix, 0, mtMatrix, 0, mFinalMatrix, 0);
         Matrix.multiplyMM(mFinalMatrix, 0, mVMatrix, 0, mFinalMatrix, 0);
         Matrix.multiplyMM(mFinalMatrix, 0, mProjectMatrix, 0, mFinalMatrix, 0);
         return mFinalMatrix;

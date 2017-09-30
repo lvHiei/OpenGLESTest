@@ -263,6 +263,7 @@ public class SunRender extends BaseRender{
     protected Point lastEarthPoint = null;
     protected Point lastMoonPoint = null;
 
+    protected int mEarthRotateAngle = 15;       // 地球自传角度
 
     protected boolean mbStartedDraw = false;
 
@@ -663,7 +664,9 @@ public class SunRender extends BaseRender{
             spm.minus(lastMoonPoint);
         }
 
-        mEarthMatrix.setTranstate(spe.x, spe.y, spe.z);
+        mEarthMatrix.initTranslate();
+        mEarthMatrix.setRotate(mEarthRotateAngle, 0.0f, 1.0f, 0.3f);
+        mEarthMatrix.setTranstate(pe.x, pe.y, pe.z);
         mMoonMatrix.setTranstate(spm.x, spm.y, spm.z);
 
         ++mDrawCount;
