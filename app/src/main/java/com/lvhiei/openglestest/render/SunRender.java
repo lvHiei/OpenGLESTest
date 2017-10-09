@@ -18,6 +18,137 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class SunRender extends BaseRender{
+//    private static final String vertex_shader = "\n" +
+//            "attribute vec4 a_Position;                  \n" +
+//            "attribute vec2 a_TextureCoordinates;                  \n" +
+//            "uniform  mat4 u_sunMatrix;                  \n" +
+//            "uniform  mat4 u_earthMatrix;                  \n" +
+//            "uniform  mat4 u_moonMatrix;                  \n" +
+//            "                            \n" +
+//            "uniform  float r_sun;                  \n" +
+//            "uniform  float r_earth;                  \n" +
+//            "uniform  float r_moon;     \n" +
+//            "             \n" +
+//            "varying  vec2 v_TextureCoordinates;                  \n" +
+//            "varying  vec4 v_Position;                  \n" +
+//            "varying  float v_r_sun;                  \n" +
+//            "varying  float v_r_earth;                  \n" +
+//            "varying  float v_r_moon;                  \n" +
+//            "                       \n" +
+//            "bool isEqual(float x, float y)\n" +
+//            "{\n" +
+//            "    return abs(x - y) < 0.01;\n" +
+//            "}                       \n" +
+//            "                       \n" +
+//            "bool isSun(vec3 pos)                       \n" +
+//            "{                                             \n" +
+//            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
+//            "     float dist = distance(pos, zero);                                           \n" +
+//            "     return isEqual(dist, r_sun);                                           \n" +
+//            "}                                             \n" +
+//            "                                    \n" +
+//            "bool isEarth(vec3 pos)                       \n" +
+//            "{                                             \n" +
+//            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
+//            "     float dist = distance(pos, zero);                                           \n" +
+//            "     return isEqual(dist, r_earth);                                           \n" +
+//            "}                                            bool isMoon(vec3 pos)                       \n" +
+//            "{                                             \n" +
+//            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
+//            "     float dist = distance(pos, zero);                                           \n" +
+//            "     return isEqual(dist, r_moon);                                           \n" +
+//            "} \n" +
+//            "                                    \n" +
+//            "vec4 getPosition(vec4 pos)                       \n" +
+//            "{   \n" +
+//            "    vec4 ret = pos;\n" +
+//            "\n" +
+//            "    if(isSun(pos.xyz))\n" +
+//            "    {\n" +
+//            "        ret = u_sunMatrix * pos;\n" +
+//            "    }\n" +
+//            "    else if(isEarth(pos.xyz))\n" +
+//            "    {\n" +
+//            "        ret = u_earthMatrix * pos;\n" +
+//            "    }\n" +
+//            "    else if(isMoon(pos.xyz))\n" +
+//            "    {\n" +
+//            "        ret = u_moonMatrix * pos;\n" +
+//            "    }\n" +
+//            "    \n" +
+//            "    return ret;\n" +
+//            "}                                             \n" +
+//            "                       \n" +
+//            "void main()                                   \n" +
+//            "{                                                         \n" +
+//            "    gl_Position = getPosition(a_Position);\n" +
+//            "    v_Position = a_Position;\n" +
+//            "    v_TextureCoordinates = a_TextureCoordinates;               \n" +
+//            "    v_r_sun = r_sun;               \n" +
+//            "    v_r_earth = r_earth;               \n" +
+//            "    v_r_moon = r_moon;               \n" +
+//            "}"
+//            ;
+//
+//
+//
+//    private static final String frag_shader = "\n" +
+//            "precision mediump float;                \n" +
+//            "                                                       \n" +
+//            "uniform sampler2D u_sunTextureUnit;                                              \n" +
+//            "uniform sampler2D u_earthTextureUnit;                                              \n" +
+//            "uniform sampler2D u_moonTextureUnit;                                              \n" +
+//            "varying vec2 v_TextureCoordinates;                                              \n" +
+//            "varying vec4 v_Position;                                              \n" +
+//            "varying float v_r_sun;                                              \n" +
+//            "varying float v_r_earth;                                              \n" +
+//            "varying float v_r_moon;                                              \n" +
+//            "\n" +
+//            "\n" +
+//            "bool isEqual(float x, float y)\n" +
+//            "{\n" +
+//            "    return abs(x - y) < 0.01;\n" +
+//            "}                       \n" +
+//            "                       \n" +
+//            "bool isSun(vec3 pos)                       \n" +
+//            "{                                             \n" +
+//            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
+//            "     float dist = distance(pos, zero);                                           \n" +
+//            "     return isEqual(dist, v_r_sun);                                           \n" +
+//            "}                                             \n" +
+//            "                                    \n" +
+//            "bool isEarth(vec3 pos)                       \n" +
+//            "{                                             \n" +
+//            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
+//            "     float dist = distance(pos, zero);                                           \n" +
+//            "     return isEqual(dist, v_r_earth);                                           \n" +
+//            "}                                           \n" +
+//            "\n" +
+//            "bool isMoon(vec3 pos)                       \n" +
+//            "{                                             \n" +
+//            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
+//            "     float dist = distance(pos, zero);                                           \n" +
+//            "     return isEqual(dist, v_r_moon);                                           \n" +
+//            "} \n" +
+//            "                 \n" +
+//            "void main()                                        \n" +
+//            "{   \n" +
+//            "    if(isSun(v_Position.xyz))\n" +
+//            "    {\n" +
+//            "        gl_FragColor = texture2D(u_sunTextureUnit, v_TextureCoordinates);                                                        \n" +
+//            "    }\n" +
+//            "    else if(isEarth(v_Position.xyz))\n" +
+//            "    {\n" +
+//            "        gl_FragColor = texture2D(u_earthTextureUnit, v_TextureCoordinates);                                                        \n" +
+//            "    }\n" +
+//            "    else if(isMoon(v_Position.xyz))\n" +
+//            "    {\n" +
+//            "        gl_FragColor = texture2D(u_moonTextureUnit, v_TextureCoordinates);                                                        \n" +
+//            "    }else{gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);}                                           \n" +
+//            "}    "
+//        ;
+
+
     private static final String vertex_shader = "\n" +
             "attribute vec4 a_Position;                  \n" +
             "attribute vec2 a_TextureCoordinates;                  \n" +
@@ -30,10 +161,11 @@ public class SunRender extends BaseRender{
             "uniform  float r_moon;     \n" +
             "             \n" +
             "varying  vec2 v_TextureCoordinates;                  \n" +
-            "varying  vec4 v_Position;                  \n" +
-            "varying  float v_r_sun;                  \n" +
-            "varying  float v_r_earth;                  \n" +
-            "varying  float v_r_moon;                  \n" +
+            "varying float planet_v;                                              \n" +
+            "\n" +
+            "const float SUN_V = 0.0;                  \n" +
+            "const float EARTH_V = 1.0;                  \n" +
+            "const float MOON_V = 2.0;                  \n" +
             "                       \n" +
             "bool isEqual(float x, float y)\n" +
             "{\n" +
@@ -52,7 +184,8 @@ public class SunRender extends BaseRender{
             "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
             "     float dist = distance(pos, zero);                                           \n" +
             "     return isEqual(dist, r_earth);                                           \n" +
-            "}                                            bool isMoon(vec3 pos)                       \n" +
+            "}                                            \n" +
+            "bool isMoon(vec3 pos)                       \n" +
             "{                                             \n" +
             "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
             "     float dist = distance(pos, zero);                                           \n" +
@@ -66,14 +199,17 @@ public class SunRender extends BaseRender{
             "    if(isSun(pos.xyz))\n" +
             "    {\n" +
             "        ret = u_sunMatrix * pos;\n" +
+            "        planet_v = SUN_V;\n" +
             "    }\n" +
             "    else if(isEarth(pos.xyz))\n" +
             "    {\n" +
             "        ret = u_earthMatrix * pos;\n" +
+            "        planet_v = EARTH_V;\n" +
             "    }\n" +
             "    else if(isMoon(pos.xyz))\n" +
             "    {\n" +
             "        ret = u_moonMatrix * pos;\n" +
+            "        planet_v = MOON_V;\n" +
             "    }\n" +
             "    \n" +
             "    return ret;\n" +
@@ -82,11 +218,7 @@ public class SunRender extends BaseRender{
             "void main()                                   \n" +
             "{                                                         \n" +
             "    gl_Position = getPosition(a_Position);\n" +
-            "    v_Position = a_Position;\n" +
             "    v_TextureCoordinates = a_TextureCoordinates;               \n" +
-            "    v_r_sun = r_sun;               \n" +
-            "    v_r_earth = r_earth;               \n" +
-            "    v_r_moon = r_moon;               \n" +
             "}"
             ;
 
@@ -99,54 +231,47 @@ public class SunRender extends BaseRender{
             "uniform sampler2D u_earthTextureUnit;                                              \n" +
             "uniform sampler2D u_moonTextureUnit;                                              \n" +
             "varying vec2 v_TextureCoordinates;                                              \n" +
-            "varying vec4 v_Position;                                              \n" +
-            "varying float v_r_sun;                                              \n" +
-            "varying float v_r_earth;                                              \n" +
-            "varying float v_r_moon;                                              \n" +
+            "varying float planet_v;                                              \n" +
+            "\n" +
+            "const float SUN_V = 0.0;                  \n" +
+            "const float EARTH_V = 1.0;                  \n" +
+            "const float MOON_V = 2.0;                  \n" +
             "\n" +
             "\n" +
-            "bool isEqual(float x, float y)\n" +
-            "{\n" +
-            "    return abs(x - y) < 0.01;\n" +
-            "}                       \n" +
-            "                       \n" +
-            "bool isSun(vec3 pos)                       \n" +
+            "bool isSun()                       \n" +
             "{                                             \n" +
-            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
-            "     float dist = distance(pos, zero);                                           \n" +
-            "     return isEqual(dist, v_r_sun);                                           \n" +
+            "     return planet_v == SUN_V;                                           \n" +
             "}                                             \n" +
             "                                    \n" +
-            "bool isEarth(vec3 pos)                       \n" +
+            "bool isEarth()                       \n" +
             "{                                             \n" +
-            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
-            "     float dist = distance(pos, zero);                                           \n" +
-            "     return isEqual(dist, v_r_earth);                                           \n" +
+            "     return planet_v == EARTH_V;                                           \n" +
             "}                                           \n" +
             "\n" +
-            "bool isMoon(vec3 pos)                       \n" +
+            "bool isMoon()                       \n" +
             "{                                             \n" +
-            "     vec3 zero = vec3(0.0, 0.0, 0.0);                                           \n" +
-            "     float dist = distance(pos, zero);                                           \n" +
-            "     return isEqual(dist, v_r_moon);                                           \n" +
+            "     return planet_v == MOON_V;                                           \n" +
             "} \n" +
             "                 \n" +
             "void main()                                        \n" +
             "{   \n" +
-            "    if(isSun(v_Position.xyz))\n" +
+            "    if(isSun())\n" +
             "    {\n" +
             "        gl_FragColor = texture2D(u_sunTextureUnit, v_TextureCoordinates);                                                        \n" +
             "    }\n" +
-            "    else if(isEarth(v_Position.xyz))\n" +
+            "    else if(isEarth())\n" +
             "    {\n" +
             "        gl_FragColor = texture2D(u_earthTextureUnit, v_TextureCoordinates);                                                        \n" +
             "    }\n" +
-            "    else if(isMoon(v_Position.xyz))\n" +
+            "    else if(isMoon())\n" +
             "    {\n" +
             "        gl_FragColor = texture2D(u_moonTextureUnit, v_TextureCoordinates);                                                        \n" +
-            "    }else{gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);}                                           \n" +
+            "    }else\n" +
+            "    {\n" +
+            "       gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n" +
+            "    }                                           \n" +
             "}    "
-        ;
+            ;
 
     public class Point{
         public Point(Point p){
