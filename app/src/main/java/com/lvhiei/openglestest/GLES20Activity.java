@@ -20,6 +20,7 @@ import com.lvhiei.openglestest.render.IGLESRenderer;
 import com.lvhiei.openglestest.render.MatrixUtil;
 import com.lvhiei.openglestest.render.RotateCubeRender;
 import com.lvhiei.openglestest.render.ScaleCubeRender;
+import com.lvhiei.openglestest.render.SolarSystemRender;
 import com.lvhiei.openglestest.render.SquareRender;
 import com.lvhiei.openglestest.render.SunRender;
 import com.lvhiei.openglestest.render.TextureBallRender;
@@ -189,7 +190,8 @@ public class GLES20Activity extends Activity {
                 mbLandScape = true;
                 break;
             case R.id.btn_drawSun:
-                mRender = new SunRender(this);
+//                mRender = new SunRender(this);
+                mRender = new SolarSystemRender(this);
                 mbLandScape = true;
                 break;
             default:
