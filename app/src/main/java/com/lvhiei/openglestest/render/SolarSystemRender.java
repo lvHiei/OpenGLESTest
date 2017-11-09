@@ -21,6 +21,7 @@ public class SolarSystemRender extends BaseRender {
             "attribute vec4 earth_Position;                  \n" +
             "attribute vec4 mars_Position;                  \n" +
             "attribute vec4 jupiter_Position;                  \n" +
+            "attribute vec4 saturn_Position;                  \n" +
 //            "attribute vec4 _Position;                  \n" +
             "attribute vec2 sun_TextureCoordinates;                  \n" +
             "attribute vec2 mercury_TextureCoordinates;                  \n" +
@@ -28,6 +29,7 @@ public class SolarSystemRender extends BaseRender {
             "attribute vec2 earth_TextureCoordinates;                  \n" +
             "attribute vec2 mars_TextureCoordinates;                  \n" +
             "attribute vec2 jupiter_TextureCoordinates;                  \n" +
+            "attribute vec2 saturn_TextureCoordinates;                  \n" +
 //            "attribute vec2 _TextureCoordinates;                  \n" +
             "\n" +
             "uniform  mat4 u_sunMatrix;                  \n" +
@@ -36,6 +38,7 @@ public class SolarSystemRender extends BaseRender {
             "uniform  mat4 u_earthMatrix;                  \n" +
             "uniform  mat4 u_marsMatrix;                  \n" +
             "uniform  mat4 u_jupiterMatrix;                  \n" +
+            "uniform  mat4 u_saturnMatrix;                  \n" +
 //            "uniform  mat4 u_Matrix;                  \n" +
             "uniform  mat4 u_moonMatrix;                  \n" +
             "uniform  float planet_type;                  \n" +
@@ -49,6 +52,7 @@ public class SolarSystemRender extends BaseRender {
             "const float EARTH_TYPE = 3.0;                  \n" +
             "const float MARS_TYPE = 4.0;                  \n" +
             "const float JUPITER_TYPE = 5.0;                  \n" +
+            "const float SATURN_TYPE = 6.0;                  \n" +
             "                       \n" +
             "bool isEqual(float x, float y)\n" +
             "{\n" +
@@ -61,26 +65,36 @@ public class SolarSystemRender extends BaseRender {
             "    {\n" +
             "       gl_Position = u_sunMatrix * sun_Position;\n" +
             "       v_TextureCoordinates = sun_TextureCoordinates;\n" +
-            "    }else if(isEqual(planet_type, MERCURY_TYPE))\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, MERCURY_TYPE))\n" +
             "    {\n" +
             "       gl_Position = u_mercuryMatrix * mercury_Position;\n" +
             "       v_TextureCoordinates = mercury_TextureCoordinates;\n" +
-            "    }else if(isEqual(planet_type, VENUS_TYPE))\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, VENUS_TYPE))\n" +
             "    {\n" +
             "       gl_Position = u_venusMatrix * venus_Position;\n" +
             "       v_TextureCoordinates = venus_TextureCoordinates;\n" +
-            "    }else if(isEqual(planet_type, EARTH_TYPE))\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, EARTH_TYPE))\n" +
             "    {\n" +
             "       gl_Position = u_earthMatrix * earth_Position;\n" +
             "       v_TextureCoordinates = earth_TextureCoordinates;\n" +
-            "    }else if(isEqual(planet_type, MARS_TYPE))\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, MARS_TYPE))\n" +
             "    {\n" +
             "       gl_Position = u_marsMatrix * mars_Position;\n" +
             "       v_TextureCoordinates = mars_TextureCoordinates;\n" +
-            "    }else if(isEqual(planet_type, JUPITER_TYPE))\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, JUPITER_TYPE))\n" +
             "    {\n" +
             "       gl_Position = u_jupiterMatrix * jupiter_Position;\n" +
             "       v_TextureCoordinates = jupiter_TextureCoordinates;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, SATURN_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_saturnMatrix * saturn_Position;\n" +
+            "       v_TextureCoordinates = saturn_TextureCoordinates;\n" +
             "    }\n" +
             "    planet_v = planet_type;               \n" +
             "}"
@@ -95,6 +109,7 @@ public class SolarSystemRender extends BaseRender {
             "uniform sampler2D u_earthTextureUnit;                                              \n" +
             "uniform sampler2D u_marsTextureUnit;                                              \n" +
             "uniform sampler2D u_jupiterTextureUnit;                                              \n" +
+            "uniform sampler2D u_saturnTextureUnit;                                              \n" +
 //            "uniform sampler2D u_TextureUnit;                                              \n" +
             "uniform sampler2D u_moonTextureUnit;                                              \n" +
             "varying vec2 v_TextureCoordinates;                                              \n" +
@@ -106,6 +121,7 @@ public class SolarSystemRender extends BaseRender {
             "const float EARTH_TYPE = 3.0;                  \n" +
             "const float MARS_TYPE = 4.0;                  \n" +
             "const float JUPITER_TYPE = 5.0;                  \n" +
+            "const float SATURN_TYPE = 6.0;                  \n" +
             "\n" +
             "bool isEqual(float x, float y)\n" +
             "{\n" +
@@ -138,6 +154,10 @@ public class SolarSystemRender extends BaseRender {
             "    {\n" +
             "        gl_FragColor = texture2D(u_jupiterTextureUnit, v_TextureCoordinates);                                                        \n" +
             "    }\n" +
+            "    else if(isEqual(planet_v, SATURN_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_saturnTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
 //            "    else if(isEqual(planet_v, MOON_TYPE))\n" +
 //            "    {\n" +
 //            "        gl_FragColor = texture2D(u_moonTextureUnit, v_TextureCoordinates);                                                        \n" +
@@ -159,6 +179,7 @@ public class SolarSystemRender extends BaseRender {
     protected static final float EARTH_RADIUS = 0.05f;             // 地球半径
     protected static final float MARS_RADIUS = 0.065f;             // 火星半径
     protected static final float JUPITER_RADIUS = 0.1f;            // 木星半径
+    protected static final float SATURN_RADIUS = 0.085f;           // 土星半径
 
     // 行星公转半径
     protected static final float MECURY_TRACK_RADIUS = 0.5f;       // 水星中心距离太阳中心距离
@@ -166,6 +187,7 @@ public class SolarSystemRender extends BaseRender {
     protected static final float EARTH_TRACK_RADIUS = 0.8f;        // 地球中心距离太阳中心距离
     protected static final float MARS_TRACK_RADIUS = 0.9f;         // 火星中心距离太阳中心距离
     protected static final float JUPITER_TRACK_RADIUS = 1.1f;      // 木星中心距离太阳中心距离
+    protected static final float SATURN_TRACK_RADIUS = 1.25f;      // 土星中心距离太阳中心距离
 
     // 行星公转速度(越大越慢)
     protected static final int MERCURY_TRIANGLE_COUNT = 300;       // 水星公转轨迹的三角个数
@@ -173,6 +195,7 @@ public class SolarSystemRender extends BaseRender {
     protected static final int EARTH_TRIANGLE_COUNT = 1500;        // 地球公转轨迹的三角个数
     protected static final int MARS_TRIANGLE_COUNT = 1750;         // 火星公转轨迹的三角个数
     protected static final int JUPITER_TRIANGLE_COUNT = 2000;      // 木星公转轨迹的三角个数
+    protected static final int SATURN_TRIANGLE_COUNT = 2300;       // 土星公转轨迹的三角个数
 
     // 行星自传速度(越大越快)
     protected static final int MERCURY_ROTATE_ANGLE = 40;          // 水星自传角度
@@ -180,6 +203,7 @@ public class SolarSystemRender extends BaseRender {
     protected static final int EARTH_ROTATE_ANGLE = 30;            // 地球自传角度
     protected static final int MARS_ROTATE_ANGLE = 28;             // 火星自传角度
     protected static final int JUPITER_ROTATE_ANGLE = 25;          // 木星自传角度
+    protected static final int SATURN_ROTATE_ANGLE = 23;           // 土星自传角度
 
 //    protected float distance_em = 0.3f; // 月球中心距离地球中心距离
 
@@ -216,6 +240,7 @@ public class SolarSystemRender extends BaseRender {
             {"earth.bmp", "u_earthTextureUnit", "u_earthMatrix", "earth_Position", "earth_TextureCoordinates", "planet_type", },
             {"mars.bmp", "u_marsTextureUnit", "u_marsMatrix", "mars_Position", "mars_TextureCoordinates", "planet_type", },
             {"jupiter.bmp", "u_jupiterTextureUnit", "u_jupiterMatrix", "jupiter_Position", "jupiter_TextureCoordinates", "planet_type", },
+            {"saturn.bmp", "u_saturnTextureUnit", "u_saturnMatrix", "saturn_Position", "saturn_TextureCoordinates", "planet_type", },
     };
 
     private float[][] mPlanetFParams = {
@@ -225,6 +250,7 @@ public class SolarSystemRender extends BaseRender {
             {EARTH_RADIUS, EARTH_TRACK_RADIUS, },
             {MARS_RADIUS, MARS_TRACK_RADIUS, },
             {JUPITER_RADIUS, JUPITER_TRACK_RADIUS, },
+            {SATURN_RADIUS, SATURN_TRACK_RADIUS, },
     };
 
     private int[][] mPlanetIParams = {
@@ -234,6 +260,7 @@ public class SolarSystemRender extends BaseRender {
             {angleSpan, EARTH_TRIANGLE_COUNT, EARTH_ROTATE_ANGLE},
             {angleSpan, MARS_TRIANGLE_COUNT, MARS_ROTATE_ANGLE},
             {angleSpan, JUPITER_TRIANGLE_COUNT, JUPITER_ROTATE_ANGLE},
+            {angleSpan, SATURN_TRIANGLE_COUNT, SATURN_ROTATE_ANGLE},
     };
 
     private Planet mSun;
@@ -242,6 +269,7 @@ public class SolarSystemRender extends BaseRender {
     private Planet mEarth;
     private Planet mMars;
     private Planet mJupiter;
+    private Planet mSaturn;
 
     public SolarSystemRender(Context context) {
         super();
@@ -262,6 +290,7 @@ public class SolarSystemRender extends BaseRender {
         mEarth = createPlanet(row++);
         mMars = createPlanet(row++);
         mJupiter = createPlanet(row++);
+        mSaturn = createPlanet(row++);
     }
 
     protected Planet createPlanet(int row){
@@ -290,6 +319,7 @@ public class SolarSystemRender extends BaseRender {
         mEarth.initTracks(x, y, z);
         mMars.initTracks(x, y, z);
         mJupiter.initTracks(x, y, z);
+        mSaturn.initTracks(x, y, z);
     }
 
     protected void initAllCoordinate() {
@@ -299,6 +329,7 @@ public class SolarSystemRender extends BaseRender {
         mEarth.initCoordinates();
         mMars.initCoordinates();
         mJupiter.initCoordinates();
+        mSaturn.initCoordinates();
     }
 
     @Override
@@ -315,6 +346,7 @@ public class SolarSystemRender extends BaseRender {
         mEarth.onSurfaceCreated(gl, config, mProgram);
         mMars.onSurfaceCreated(gl, config, mProgram);
         mJupiter.onSurfaceCreated(gl, config, mProgram);
+        mSaturn.onSurfaceCreated(gl, config, mProgram);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
@@ -329,6 +361,7 @@ public class SolarSystemRender extends BaseRender {
         mEarth.onSurfaceChanged(gl, width, height);
         mMars.onSurfaceChanged(gl, width, height);
         mJupiter.onSurfaceChanged(gl, width, height);
+        mSaturn.onSurfaceChanged(gl, width, height);
     }
 
     @Override
@@ -341,6 +374,7 @@ public class SolarSystemRender extends BaseRender {
         mEarth.onDrawFrame(gl);
         mMars.onDrawFrame(gl);
         mJupiter.onDrawFrame(gl);
+        mSaturn.onDrawFrame(gl);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
@@ -356,6 +390,7 @@ public class SolarSystemRender extends BaseRender {
         mEarth.releaseGL();
         mMars.releaseGL();
         mJupiter.releaseGL();
+        mSaturn.releaseGL();
     }
 
     @Override
