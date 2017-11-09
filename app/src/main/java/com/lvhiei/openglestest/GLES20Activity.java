@@ -94,6 +94,8 @@ public class GLES20Activity extends Activity {
                     }else if(mRenderId == R.id.btn_textureBall){
                         mRender.getMatrixUtil().setRotate(30, 0.0f, 1.0f, 0.0f);
                         mSurfaceView.requestRender();
+                    }else if(mRenderId == R.id.btn_drawSolarSystem){
+                        ((SolarSystemRender)mRender).addEyeY();
                     }
                     break;
                 }
@@ -190,7 +192,10 @@ public class GLES20Activity extends Activity {
                 mbLandScape = true;
                 break;
             case R.id.btn_drawSun:
-//                mRender = new SunRender(this);
+                mRender = new SunRender(this);
+                mbLandScape = true;
+                break;
+            case R.id.btn_drawSolarSystem:
                 mRender = new SolarSystemRender(this);
                 mbLandScape = true;
                 break;

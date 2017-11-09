@@ -254,36 +254,6 @@ public class Planet {
         return mPlanetType;
     }
 
-    public void projectFrustumMatrix(int width, int height){
-        final float aspectRatio = width > height ?
-                (float) width / (float) height :
-                (float) height / (float) width;
-
-//        final float near = 20.0f;
-//        final float far = 100.0f;
-
-        final float cx = 0.0f;
-        final float cy = 0.0f;
-        final float cz = 30.0f;
-
-
-        final float near = 20.0f;
-        final float far = 100.0f;
-
-//        final float cx = -16.0f;
-//        final float cy = 8.0f;
-//        final float cz = 45.0f;
-
-
-        if(width > height){
-            mMatrixUtil.setProjectFrustum(-aspectRatio, aspectRatio, -1.0f, 1.0f, near, far);
-        }else{
-            mMatrixUtil.setProjectFrustum(-1.0f, 1.0f, -aspectRatio, aspectRatio, near, far);
-        }
-
-        mMatrixUtil.setCamera(cx, cy, cz, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-    }
-
     public void onSurfaceCreated(GL10 gl, EGLConfig config, int program){
         mPostionLoc = GLES20.glGetAttribLocation(program, maPositionName);
         GLES20.glVertexAttribPointer(mPostionLoc, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, 0, mVertexCoord);
@@ -301,7 +271,6 @@ public class Planet {
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height){
-        projectFrustumMatrix(width, height);
     }
 
     public void onDrawFrame(GL10 gl){

@@ -272,6 +272,15 @@ public class SolarSystemRender extends BaseRender {
         }
     };
 
+    private float mEyeX = 0.0f;
+    private float mEyeY = 0.0f;
+    private float mEyeZ = 25.0f;
+
+    private float mNear = 20.0f;
+    private float mFar = 100.0f;
+
+
+
     private String[][] mPlanetSParams = {
             {"sun.bmp", "u_sunTextureUnit", "u_sunMatrix", "sun_Position", "sun_TextureCoordinates", "planet_type", },
             {"mercury.bmp", "u_mercuryTextureUnit", "u_mercuryMatrix", "mercury_Position", "mercury_TextureCoordinates", "planet_type", },
@@ -409,7 +418,7 @@ public class SolarSystemRender extends BaseRender {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         super.onSurfaceChanged(gl, width, height);
-
+        projectFrustumMatrix(width, height);
         mSun.onSurfaceChanged(gl, width, height);
         mMercury.onSurfaceChanged(gl, width, height);
         mVenus.onSurfaceChanged(gl, width, height);
@@ -492,4 +501,33 @@ public class SolarSystemRender extends BaseRender {
         }
     }
 
+    public void projectFrustumMatrix(int width, int height){
+        final float aspectRatio = width > height ?
+                (float) width / (float) height :
+                (float) height / (float) width;
+//        final float cx = -16.0f;
+//        final float cy = 8.0f;
+//        final float cz = 45.0f;
+
+
+        if(width > height){
+            MatrixUtil.setProjectFrustum(-aspectRatio, aspectRatio, -1.0f, 1.0f, mNear, mFar);
+        }else{
+            MatrixUtil.setProjectFrustum(-1.0f, 1.0f, -aspectRatio, aspectRatio, mNear, mFar);
+        }
+
+        MatrixUtil.setCamera(mEyeX, mEyeY, mEyeZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    }
+
+    public void setEye(float x, float y, float z){
+        mEyeX = x;
+        mEyeY = y;
+        mEyeZ = z;
+        MatrixUtil.setCamera(mEyeX, mEyeY, mEyeZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    }
+
+    public void addEyeY(){
+        mEyeY += 1.0f;
+        setEye(mEyeX, mEyeY, mEyeZ);
+    }
 }

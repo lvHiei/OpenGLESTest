@@ -115,6 +115,13 @@
                 android:layout_gravity="center"
                 android:text="drawSun"/>
 
+            <Button
+                android:id="@+id/btn_drawSolarSystem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="drawSolarSystem"/>
+
         </LinearLayout>
 
     </ScrollView>

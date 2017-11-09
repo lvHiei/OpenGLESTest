@@ -8,8 +8,8 @@ import android.opengl.Matrix;
 
 
 public class MatrixUtil {
-    private float[] mProjectMatrix = new float[16];
-    private float[] mVMatrix = new float[16];
+    private static float[] mProjectMatrix = new float[16];
+    private static float[] mVMatrix = new float[16];
     private float[] mtMatrix = new float[16];
     private float[] mrMatrix = new float[16];
     private float[] msMatrix = new float[16];
@@ -31,7 +31,7 @@ public class MatrixUtil {
     }
 
     // 设置摄像头位置 c[xyz] 摄像头位置 t[xyz] 目标点位置 up[xyz] 摄像头up向量
-    public void setCamera(float cx, float cy, float cz,
+    public static void setCamera(float cx, float cy, float cz,
                                  float tx, float ty, float tz,
                                  float upx, float upy, float upz)
     {
@@ -47,7 +47,7 @@ public class MatrixUtil {
      * @param near      近平面的 z
      * @param far       远平面的 z
      */
-    public void setProjectFrustum(float left, float right, float bottom, float top, float near, float far){
+    public static void setProjectFrustum(float left, float right, float bottom, float top, float near, float far){
         Matrix.frustumM(mProjectMatrix, 0, left, right, bottom, top, near, far);
     }
 

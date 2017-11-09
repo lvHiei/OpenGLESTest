@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_textureCube).setOnClickListener(mListener);
         findViewById(R.id.btn_textureBall).setOnClickListener(mListener);
         findViewById(R.id.btn_drawSun).setOnClickListener(mListener);
+        findViewById(R.id.btn_drawSolarSystem).setOnClickListener(mListener);
     }
 
 
