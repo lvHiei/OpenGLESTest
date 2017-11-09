@@ -50,33 +50,36 @@ public class Planet {
     protected int mTexturePosition;             // 纹理位置(第几个纹理)
     protected int mTextureId;                   // 纹理id
     protected String mTexturePicName;           // 纹理图片名称
+    protected int mPostionLoc;                  // 顶点坐标 attribute位置
+    protected int mTextureCoordLoc;             // 纹理坐标 attribute位置
     protected int mTextureLoc;                  // 纹理id uniform位置
     protected int mMatrixLoc;                   // 转换矩阵 uniform位置
     protected int mTypeLoc;                     // 行星类型 uniform位置
+    protected String maPositionName;            // 顶点坐标attribute 名
+    protected String maTextureCoodName;         // 纹理坐标attribute 名
     protected String muTextureName;             // 纹理uniform 名
     protected String muMatrixName;              // 转换矩阵uniform 名
+    protected String muTypeName;                // 行星类型uniform 名
 
     protected Vector3 mRotateVec;               // 自传轴
 
 
     protected Context mContext;
 
-
-    public Planet(Context context, int type, int texPos, String textName, String tname, String mname){
-        this(context, type, texPos, textName,tname, mname, 0.0f, 0);
+    public Planet(Context context, int type, int texPos, String textName, String tname, String mname, String posName, String tcName, String typeName, float r, int angleSpan){
+        this(context, type, texPos, textName, tname, mname, posName, tcName, typeName, r, angleSpan, 0.0f, 0, 0);
     }
 
-    public Planet(Context context, int type, int texPos, String textName, String tname, String mname, float r, int angleSpan){
-        this(context, type, texPos, textName, tname, mname, r, angleSpan, 0.0f, 0, 0);
-    }
-
-    public Planet(Context context, int type, int texPos, String textName, String tname, String mname, float r, int angleSpan, float t_r, int tcount, int rotateAngle){
+    public Planet(Context context, int type, int texPos, String textName, String tname, String mname, String posName, String tcName, String typeName, float r, int angleSpan, float t_r, int tcount, int rotateAngle){
         mContext = context;
         mPlanetType = type;
         mTexturePosition = texPos;
         mTexturePicName = textName;
         muTextureName = tname;
         muMatrixName = mname;
+        maPositionName = posName;
+        maTextureCoodName = tcName;
+        muTypeName = typeName;
         mRadius = r;
         mAngleSpan = angleSpan;
         mTrackRadius = t_r;
@@ -282,9 +285,17 @@ public class Planet {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config, int program){
+        mPostionLoc = GLES20.glGetAttribLocation(program, maPositionName);
+        GLES20.glVertexAttribPointer(mPostionLoc, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, 0, mVertexCoord);
+        GLES20.glEnableVertexAttribArray(mPostionLoc);
+
+        mTextureCoordLoc = GLES20.glGetAttribLocation(program, maTextureCoodName);
+        GLES20.glVertexAttribPointer(mTextureCoordLoc, COORDS_PER_TEXCOORD, GLES20.GL_FLOAT, false, 0, mTextureCoord);
+        GLES20.glEnableVertexAttribArray(mTextureCoordLoc);
+
         mTextureLoc = GLES20.glGetUniformLocation(program, muTextureName);
         mMatrixLoc = GLES20.glGetUniformLocation(program, muMatrixName);
-        mTypeLoc = GLES20.glGetUniformLocation(program, "c_type");
+        mTypeLoc = GLES20.glGetUniformLocation(program, muTypeName);
 
         mTextureId = OpenGLUtils.loadTexture(mContext, mTexturePicName);
     }
@@ -293,7 +304,7 @@ public class Planet {
         projectFrustumMatrix(width, height);
     }
 
-    public void onDrawFrame(GL10 gl, int offset){
+    public void onDrawFrame(GL10 gl){
         setTranslate();
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + mTexturePosition);
@@ -302,7 +313,7 @@ public class Planet {
         GLES20.glUniform1f(mTypeLoc, mPlanetType*1.0f);
         GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, offset, mVertexCount);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mVertexCount);
     }
 
     public void releaseGL(){
