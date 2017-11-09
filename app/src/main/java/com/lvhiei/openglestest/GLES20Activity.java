@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.lvhiei.openglestest.render.BallRender;
 import com.lvhiei.openglestest.render.BaseRender;
@@ -35,6 +36,9 @@ public class GLES20Activity extends Activity {
     private GLSurfaceView mSurfaceView;
     private BaseRender mRender;
     private boolean mbLandScape;
+
+    private TextView mTextview;
+    private String mText = "";
 
     private float mPreviousX = 0;
     private float mPreviousY = 0;
@@ -96,6 +100,7 @@ public class GLES20Activity extends Activity {
                         mSurfaceView.requestRender();
                     }else if(mRenderId == R.id.btn_drawSolarSystem){
                         ((SolarSystemRender)mRender).addEyeY();
+                        genText();
                     }
                     break;
                 }
@@ -117,6 +122,8 @@ public class GLES20Activity extends Activity {
 
         Bundle bundle = getIntent().getExtras();
         mRenderId = bundle.getInt("renderid");
+
+        mTextview = (TextView) findViewById(R.id.tv_showEyes);
 
         initGLSurfaceView();
 
@@ -197,6 +204,7 @@ public class GLES20Activity extends Activity {
                 break;
             case R.id.btn_drawSolarSystem:
                 mRender = new SolarSystemRender(this);
+                genText();
                 mbLandScape = true;
                 break;
             default:
@@ -215,5 +223,15 @@ public class GLES20Activity extends Activity {
     protected void onPause() {
         super.onPause();
         mRender.onPause();
+    }
+
+    protected void genText(){
+        SolarSystemRender render = (SolarSystemRender) mRender;
+        if(render == null){
+            return;
+        }
+        mText = String.format("eye:(%.0f,%.0f,%.0f),nf:(%.0f,%.0f)", render.getEyeX(), render.getEyeY(), render.getEyeZ(), render.getNear(), render.getFar());
+        mTextview.setText(mText);
+        mTextview.setVisibility(View.VISIBLE);
     }
 }

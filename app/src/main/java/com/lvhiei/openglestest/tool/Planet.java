@@ -229,14 +229,27 @@ public class Planet {
      */
     public void initTracks(float x, float y, float z){
         mTracks.clear();
+//
+//        // 轨迹在xz平面
+//        for (int i = 0; i < mTrackTriangleCount + 1; i++) {
+//            float angleInRadians = ((float) i / (float) mTrackTriangleCount)
+//                    * ((float) Math.PI * 2f);
+//            float tx = x + mTrackRadius * (float)Math.cos(angleInRadians);
+//            float ty = y;
+//            float tz = z + mTrackRadius * (float)Math.sin(angleInRadians);
+//            mTracks.add(new Point(tx, ty, tz));
+//        }
 
-        // 轨迹在xz平面
+
+        // 轨迹在xy平面
         for (int i = 0; i < mTrackTriangleCount + 1; i++) {
-            float angleInRadians = ((float) i / (float) mTrackTriangleCount)
-                    * ((float) Math.PI * 2f);
-            float tx = x + mTrackRadius * (float)Math.cos(angleInRadians);
-            float ty = y;
-            float tz = z + mTrackRadius * (float)Math.sin(angleInRadians);
+            float angleInRadians = (float) (((float) i / (float) mTrackTriangleCount)
+                                * ((float) Math.PI * 2f) + Math.PI / 2);
+            float tx = x + mTrackRadius * (float)Math.sin(angleInRadians);
+            float ty = y + mTrackRadius * (float)Math.cos(angleInRadians);
+            float tz = z;
+
+
             mTracks.add(new Point(tx, ty, tz));
         }
 

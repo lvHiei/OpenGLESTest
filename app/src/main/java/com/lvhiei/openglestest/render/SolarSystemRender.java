@@ -530,4 +530,24 @@ public class SolarSystemRender extends BaseRender {
         mEyeY += 1.0f;
         setEye(mEyeX, mEyeY, mEyeZ);
     }
+
+    public float getEyeX(){
+        return mEyeX;
+    }
+
+    public float getEyeY(){
+        return mEyeY;
+    }
+
+    public float getEyeZ(){
+        return mEyeZ;
+    }
+
+    public float getNear(){
+        return mNear;
+    }
+
+    public float getFar(){
+        return mFar;
+    }
 }
