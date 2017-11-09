@@ -122,30 +122,33 @@ public class SolarSystemRender extends BaseRender {
             ;
 
 
-    protected final int angleSpan = 10;// 将球进行单位切分的角度
+    protected static final int angleSpan = 10;// 将球进行单位切分的角度
 
-    protected float sun_r = 0.4f;       // 太阳半径
-    protected float mercury_r = 0.02f;       // 水星半径
-    protected float venus_r = 0.03f;       // 金星半径
-    protected float earth_r = 0.05f;    // 地球半径
-    protected float moon_r = 0.05f;     // 月亮半径
+    // 行星半径
+    protected static final float SUN_RADIUS = 0.4f;                // 太阳半径
+    protected static final float MERCURY_RADIUS = 0.02f;           // 水星半径
+    protected static final float VENUS_RADIUS = 0.03f;             // 金星半径
+    protected static final float EARTH_RADIUS = 0.05f;             // 地球半径
 
-    protected float mMecuryTrackRadius = 0.5f; // 水星中心距离太阳中心距离
-    protected float mVenusTrackRadius = 0.65f; // 金星中心距离太阳中心距离
-    protected float mEarthTrackRadius = 0.8f; // 地球中心距离太阳中心距离
-    protected float distance_em = 0.3f; // 月球中心距离地球中心距离
+    // 行星公转半径
+    protected static final float MECURY_TRACK_RADIUS = 0.5f;       // 水星中心距离太阳中心距离
+    protected static final float VENUS_TRACK_RADIUS = 0.65f;       // 金星中心距离太阳中心距离
+    protected static final float EARTH_TRACK_RADIUS = 0.8f;        // 地球中心距离太阳中心距离
+
+    // 行星公转速度(越大越慢)
+    protected static final int MERCURY_TRIANGLE_COUNT = 300;       // 水星公转轨迹的三角个数
+    protected static final int VENUS_TRIANGLE_COUNT = 800;         // 金星公转轨迹的三角个数
+    protected static final int EARTH_TRIANGLE_COUNT = 3000;        // 地球公转轨迹的三角个数
+
+    // 行星自传速度(越大越快)
+    protected static final int MERCURY_ROTATE_ANGLE = 40;          // 水星自传角度
+    protected static final int VENUS_ROTATE_ANGLE = 30;            // 水星自传角度
+    protected static final int EARTH_ROTATE_ANGLE = 15;            // 地球自传角度
+
+//    protected float distance_em = 0.3f; // 月球中心距离地球中心距离
 
     protected Context mContext;
 
-    protected final int mMercuryTriangleCount = 300;                 // 水星公转轨迹的三角个数
-    protected final int mVenusTriangleCount = 800;                 // 金星公转轨迹的三角个数
-    protected final int mEarthTriangleCount = 3000;                  // 地球公转轨迹的三角个数
-    protected final int nmTriangleCount = 250;                       // 月亮公转轨迹的三角个数
-
-
-    protected int mMercuryRotateAngle = 40;       // 水星自传角度
-    protected int mVenusRotateAngle = 30;       // 水星自传角度
-    protected int mEarthRotateAngle = 15;       // 地球自传角度
     protected Object mLock = new Object();
     protected boolean mWantStop = false;
 
@@ -170,11 +173,25 @@ public class SolarSystemRender extends BaseRender {
         }
     };
 
-    private String[][] mPlanetParams = {
+    private String[][] mPlanetSParams = {
             {"sun.bmp", "u_sunTextureUnit", "u_sunMatrix", "sun_Position", "sun_TextureCoordinates", "planet_type", },
             {"mercury.bmp", "u_mercuryTextureUnit", "u_mercuryMatrix", "mercury_Position", "mercury_TextureCoordinates", "planet_type", },
             {"venus.bmp", "u_venusTextureUnit", "u_venusMatrix", "venus_Position", "venus_TextureCoordinates", "planet_type", },
             {"earth.bmp", "u_earthTextureUnit", "u_earthMatrix", "earth_Position", "earth_TextureCoordinates", "planet_type", },
+    };
+
+    private float[][] mPlanetFParams = {
+            {SUN_RADIUS, 0.0f,},
+            {MERCURY_RADIUS, MECURY_TRACK_RADIUS, },
+            {VENUS_RADIUS, VENUS_TRACK_RADIUS, },
+            {EARTH_RADIUS, EARTH_TRACK_RADIUS, },
+    };
+
+    private int[][] mPlanetIParams = {
+            {angleSpan, 0, 0},
+            {angleSpan, MERCURY_TRIANGLE_COUNT, MERCURY_ROTATE_ANGLE},
+            {angleSpan, VENUS_TRIANGLE_COUNT, VENUS_ROTATE_ANGLE},
+            {angleSpan, EARTH_TRIANGLE_COUNT, EARTH_ROTATE_ANGLE},
     };
 
     private Planet mSun;
@@ -186,35 +203,35 @@ public class SolarSystemRender extends BaseRender {
         super();
         mContext = context;
 
-        int row = 0;
-        mSun = createSun(row, row, sun_r, angleSpan);
-        ++row;
-        mMercury = createPlanet(row, row, mercury_r, angleSpan, mMecuryTrackRadius, mMercuryTriangleCount, mMercuryRotateAngle);
-        ++row;
-        mVenus = createPlanet(row, row, mercury_r, angleSpan, mVenusTrackRadius, mVenusTriangleCount, mVenusRotateAngle);
-        ++row;
-        mEarth = createPlanet(row, row, earth_r, angleSpan, mEarthTrackRadius, mEarthTriangleCount, mEarthRotateAngle);
+        createPlanets();
 
         initAllCoordinate();
 
         initAllTracks();
     }
 
-    protected Planet createPlanet(int pos, int row, float r, int angleSpan, float t_r, int triangleCount, int rotateDegree){
-        int colume = 0;
-        return new Planet(mContext, pos, pos,
-                mPlanetParams[row][colume++], mPlanetParams[row][colume++],
-                mPlanetParams[row][colume++], mPlanetParams[row][colume++],
-                mPlanetParams[row][colume++], mPlanetParams[row][colume++], r, angleSpan, t_r, triangleCount, rotateDegree);
+    protected void createPlanets(){
+        int row = 0;
+        mSun = createPlanet(row++);
+        mMercury = createPlanet(row++);
+        mVenus = createPlanet(row++);
+        mEarth = createPlanet(row++);
     }
 
-    protected Planet createSun(int pos, int row, float r, int angleSpan){
-        int colume = 0;
-        return new Planet(mContext, pos, pos,
-                mPlanetParams[row][colume++], mPlanetParams[row][colume++],
-                mPlanetParams[row][colume++], mPlanetParams[row][colume++],
-                mPlanetParams[row][colume++], mPlanetParams[row][colume++], r, angleSpan);
+    protected Planet createPlanet(int row){
+        int scolume = 0;
+        int fcolume = 0;
+        int icolume = 0;
+        return new Planet(mContext, row, row,
+                mPlanetSParams[row][scolume++], mPlanetSParams[row][scolume++],
+                mPlanetSParams[row][scolume++], mPlanetSParams[row][scolume++],
+                mPlanetSParams[row][scolume++], mPlanetSParams[row][scolume++],
+
+                mPlanetFParams[row][fcolume++], mPlanetIParams[row][icolume++],
+                mPlanetFParams[row][fcolume++], mPlanetIParams[row][icolume++],
+                mPlanetIParams[row][icolume++]);
     }
+
 
     protected void initAllTracks(){
         // x y
