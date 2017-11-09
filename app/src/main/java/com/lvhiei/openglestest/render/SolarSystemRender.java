@@ -19,17 +19,20 @@ public class SolarSystemRender extends BaseRender {
             "attribute vec4 mercury_Position;                  \n" +
             "attribute vec4 venus_Position;                  \n" +
             "attribute vec4 earth_Position;                  \n" +
+            "attribute vec4 mars_Position;                  \n" +
 //            "attribute vec4 _Position;                  \n" +
             "attribute vec2 sun_TextureCoordinates;                  \n" +
             "attribute vec2 mercury_TextureCoordinates;                  \n" +
             "attribute vec2 venus_TextureCoordinates;                  \n" +
             "attribute vec2 earth_TextureCoordinates;                  \n" +
+            "attribute vec2 mars_TextureCoordinates;                  \n" +
 //            "attribute vec2 _TextureCoordinates;                  \n" +
             "\n" +
             "uniform  mat4 u_sunMatrix;                  \n" +
             "uniform  mat4 u_mercuryMatrix;                  \n" +
             "uniform  mat4 u_venusMatrix;                  \n" +
             "uniform  mat4 u_earthMatrix;                  \n" +
+            "uniform  mat4 u_marsMatrix;                  \n" +
 //            "uniform  mat4 u_Matrix;                  \n" +
             "uniform  mat4 u_moonMatrix;                  \n" +
             "uniform  float planet_type;                  \n" +
@@ -41,6 +44,7 @@ public class SolarSystemRender extends BaseRender {
             "const float MERCURY_TYPE = 1.0;                  \n" +
             "const float VENUS_TYPE = 2.0;                  \n" +
             "const float EARTH_TYPE = 3.0;                  \n" +
+            "const float MARS_TYPE = 4.0;                  \n" +
             "                       \n" +
             "bool isEqual(float x, float y)\n" +
             "{\n" +
@@ -65,6 +69,10 @@ public class SolarSystemRender extends BaseRender {
             "    {\n" +
             "       gl_Position = u_earthMatrix * earth_Position;\n" +
             "       v_TextureCoordinates = earth_TextureCoordinates;\n" +
+            "    }else if(isEqual(planet_type, MARS_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_marsMatrix * mars_Position;\n" +
+            "       v_TextureCoordinates = mars_TextureCoordinates;\n" +
             "    }\n" +
             "    planet_v = planet_type;               \n" +
             "}"
@@ -77,6 +85,7 @@ public class SolarSystemRender extends BaseRender {
             "uniform sampler2D u_mercuryTextureUnit;                                              \n" +
             "uniform sampler2D u_venusTextureUnit;                                              \n" +
             "uniform sampler2D u_earthTextureUnit;                                              \n" +
+            "uniform sampler2D u_marsTextureUnit;                                              \n" +
 //            "uniform sampler2D u_TextureUnit;                                              \n" +
             "uniform sampler2D u_moonTextureUnit;                                              \n" +
             "varying vec2 v_TextureCoordinates;                                              \n" +
@@ -86,6 +95,7 @@ public class SolarSystemRender extends BaseRender {
             "const float MERCURY_TYPE = 1.0;                  \n" +
             "const float VENUS_TYPE = 2.0;                  \n" +
             "const float EARTH_TYPE = 3.0;                  \n" +
+            "const float MARS_TYPE = 4.0;                  \n" +
             "\n" +
             "bool isEqual(float x, float y)\n" +
             "{\n" +
@@ -110,6 +120,10 @@ public class SolarSystemRender extends BaseRender {
             "    {\n" +
             "        gl_FragColor = texture2D(u_earthTextureUnit, v_TextureCoordinates);                                                        \n" +
             "    }\n" +
+            "    else if(isEqual(planet_v, MARS_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_marsTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
 //            "    else if(isEqual(planet_v, MOON_TYPE))\n" +
 //            "    {\n" +
 //            "        gl_FragColor = texture2D(u_moonTextureUnit, v_TextureCoordinates);                                                        \n" +
@@ -129,21 +143,25 @@ public class SolarSystemRender extends BaseRender {
     protected static final float MERCURY_RADIUS = 0.02f;           // 水星半径
     protected static final float VENUS_RADIUS = 0.03f;             // 金星半径
     protected static final float EARTH_RADIUS = 0.05f;             // 地球半径
+    protected static final float MARS_RADIUS = 0.065f;             // 火星半径
 
     // 行星公转半径
     protected static final float MECURY_TRACK_RADIUS = 0.5f;       // 水星中心距离太阳中心距离
     protected static final float VENUS_TRACK_RADIUS = 0.65f;       // 金星中心距离太阳中心距离
     protected static final float EARTH_TRACK_RADIUS = 0.8f;        // 地球中心距离太阳中心距离
+    protected static final float MARS_TRACK_RADIUS = 0.9f;         // 火星中心距离太阳中心距离
 
     // 行星公转速度(越大越慢)
     protected static final int MERCURY_TRIANGLE_COUNT = 300;       // 水星公转轨迹的三角个数
     protected static final int VENUS_TRIANGLE_COUNT = 800;         // 金星公转轨迹的三角个数
-    protected static final int EARTH_TRIANGLE_COUNT = 3000;        // 地球公转轨迹的三角个数
+    protected static final int EARTH_TRIANGLE_COUNT = 1500;        // 地球公转轨迹的三角个数
+    protected static final int MARS_TRIANGLE_COUNT = 1750;         // 火星公转轨迹的三角个数
 
     // 行星自传速度(越大越快)
     protected static final int MERCURY_ROTATE_ANGLE = 40;          // 水星自传角度
-    protected static final int VENUS_ROTATE_ANGLE = 30;            // 水星自传角度
-    protected static final int EARTH_ROTATE_ANGLE = 15;            // 地球自传角度
+    protected static final int VENUS_ROTATE_ANGLE = 35;            // 水星自传角度
+    protected static final int EARTH_ROTATE_ANGLE = 30;            // 地球自传角度
+    protected static final int MARS_ROTATE_ANGLE = 28;             // 火星自传角度
 
 //    protected float distance_em = 0.3f; // 月球中心距离地球中心距离
 
@@ -178,6 +196,7 @@ public class SolarSystemRender extends BaseRender {
             {"mercury.bmp", "u_mercuryTextureUnit", "u_mercuryMatrix", "mercury_Position", "mercury_TextureCoordinates", "planet_type", },
             {"venus.bmp", "u_venusTextureUnit", "u_venusMatrix", "venus_Position", "venus_TextureCoordinates", "planet_type", },
             {"earth.bmp", "u_earthTextureUnit", "u_earthMatrix", "earth_Position", "earth_TextureCoordinates", "planet_type", },
+            {"mars.bmp", "u_marsTextureUnit", "u_marsMatrix", "mars_Position", "mars_TextureCoordinates", "planet_type", },
     };
 
     private float[][] mPlanetFParams = {
@@ -185,6 +204,7 @@ public class SolarSystemRender extends BaseRender {
             {MERCURY_RADIUS, MECURY_TRACK_RADIUS, },
             {VENUS_RADIUS, VENUS_TRACK_RADIUS, },
             {EARTH_RADIUS, EARTH_TRACK_RADIUS, },
+            {MARS_RADIUS, MARS_TRACK_RADIUS, },
     };
 
     private int[][] mPlanetIParams = {
@@ -192,12 +212,14 @@ public class SolarSystemRender extends BaseRender {
             {angleSpan, MERCURY_TRIANGLE_COUNT, MERCURY_ROTATE_ANGLE},
             {angleSpan, VENUS_TRIANGLE_COUNT, VENUS_ROTATE_ANGLE},
             {angleSpan, EARTH_TRIANGLE_COUNT, EARTH_ROTATE_ANGLE},
+            {angleSpan, MARS_TRIANGLE_COUNT, MARS_ROTATE_ANGLE},
     };
 
     private Planet mSun;
     private Planet mMercury;
     private Planet mVenus;
     private Planet mEarth;
+    private Planet mMars;
 
     public SolarSystemRender(Context context) {
         super();
@@ -216,6 +238,7 @@ public class SolarSystemRender extends BaseRender {
         mMercury = createPlanet(row++);
         mVenus = createPlanet(row++);
         mEarth = createPlanet(row++);
+        mMars = createPlanet(row++);
     }
 
     protected Planet createPlanet(int row){
@@ -242,6 +265,7 @@ public class SolarSystemRender extends BaseRender {
         mMercury.initTracks(x, y, z);
         mVenus.initTracks(x, y, z);
         mEarth.initTracks(x, y, z);
+        mMars.initTracks(x, y, z);
     }
 
     protected void initAllCoordinate() {
@@ -249,6 +273,7 @@ public class SolarSystemRender extends BaseRender {
         mMercury.initCoordinates();
         mVenus.initCoordinates();
         mEarth.initCoordinates();
+        mMars.initCoordinates();
     }
 
     @Override
@@ -263,6 +288,7 @@ public class SolarSystemRender extends BaseRender {
         mMercury.onSurfaceCreated(gl, config, mProgram);
         mVenus.onSurfaceCreated(gl, config, mProgram);
         mEarth.onSurfaceCreated(gl, config, mProgram);
+        mMars.onSurfaceCreated(gl, config, mProgram);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
@@ -275,6 +301,7 @@ public class SolarSystemRender extends BaseRender {
         mMercury.onSurfaceChanged(gl, width, height);
         mVenus.onSurfaceChanged(gl, width, height);
         mEarth.onSurfaceChanged(gl, width, height);
+        mMars.onSurfaceChanged(gl, width, height);
     }
 
     @Override
@@ -285,6 +312,7 @@ public class SolarSystemRender extends BaseRender {
         mMercury.onDrawFrame(gl);
         mVenus.onDrawFrame(gl);
         mEarth.onDrawFrame(gl);
+        mMars.onDrawFrame(gl);
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
@@ -296,7 +324,9 @@ public class SolarSystemRender extends BaseRender {
         super.localReleaseGL();
         mSun.releaseGL();
         mMercury.releaseGL();
+        mVenus.releaseGL();
         mEarth.releaseGL();
+        mMars.releaseGL();
     }
 
     @Override
