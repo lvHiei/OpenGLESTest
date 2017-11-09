@@ -206,43 +206,43 @@ public class SolarSystemRender extends BaseRender {
     // 行星半径
     protected static final float SUN_RADIUS = 0.4f;                // 太阳半径
     protected static final float MERCURY_RADIUS = 0.02f;           // 水星半径
-    protected static final float VENUS_RADIUS = 0.03f;             // 金星半径
+    protected static final float VENUS_RADIUS = 0.05f;             // 金星半径
     protected static final float EARTH_RADIUS = 0.05f;             // 地球半径
-    protected static final float MARS_RADIUS = 0.065f;             // 火星半径
+    protected static final float MARS_RADIUS = 0.03f;              // 火星半径
     protected static final float JUPITER_RADIUS = 0.1f;            // 木星半径
-    protected static final float SATURN_RADIUS = 0.085f;           // 土星半径
+    protected static final float SATURN_RADIUS = 0.095f;           // 土星半径
     protected static final float URANUS_RADIUS = 0.07f;            // 天王星半径
-    protected static final float NEPTUNE_RADIUS = 0.08f;           // 海王星半径
+    protected static final float NEPTUNE_RADIUS = 0.065f;           // 海王星半径
 
     // 行星公转半径
     protected static final float MECURY_TRACK_RADIUS = 0.5f;       // 水星中心距离太阳中心距离
     protected static final float VENUS_TRACK_RADIUS = 0.65f;       // 金星中心距离太阳中心距离
-    protected static final float EARTH_TRACK_RADIUS = 0.8f;        // 地球中心距离太阳中心距离
-    protected static final float MARS_TRACK_RADIUS = 0.9f;         // 火星中心距离太阳中心距离
-    protected static final float JUPITER_TRACK_RADIUS = 1.1f;      // 木星中心距离太阳中心距离
-    protected static final float SATURN_TRACK_RADIUS = 1.25f;      // 土星中心距离太阳中心距离
-    protected static final float URANUS_TRACK_RADIUS = 1.4f;       // 天王星中心距离太阳中心距离
-    protected static final float NEPTUNE_TRACK_RADIUS = 1.6f;      // 海王星中心距离太阳中心距离
+    protected static final float EARTH_TRACK_RADIUS = 0.85f;        // 地球中心距离太阳中心距离
+    protected static final float MARS_TRACK_RADIUS = 1.0f;         // 火星中心距离太阳中心距离
+    protected static final float JUPITER_TRACK_RADIUS = 1.45f;      // 木星中心距离太阳中心距离
+    protected static final float SATURN_TRACK_RADIUS = 1.85f;      // 土星中心距离太阳中心距离
+    protected static final float URANUS_TRACK_RADIUS = 2.2f;       // 天王星中心距离太阳中心距离
+    protected static final float NEPTUNE_TRACK_RADIUS = 2.5f;      // 海王星中心距离太阳中心距离
 
     // 行星公转速度(越大越慢)
     protected static final int MERCURY_TRIANGLE_COUNT = 300;       // 水星公转轨迹的三角个数
-    protected static final int VENUS_TRIANGLE_COUNT = 800;         // 金星公转轨迹的三角个数
-    protected static final int EARTH_TRIANGLE_COUNT = 1500;        // 地球公转轨迹的三角个数
-    protected static final int MARS_TRIANGLE_COUNT = 1750;         // 火星公转轨迹的三角个数
-    protected static final int JUPITER_TRIANGLE_COUNT = 2000;      // 木星公转轨迹的三角个数
-    protected static final int SATURN_TRIANGLE_COUNT = 2300;       // 土星公转轨迹的三角个数
-    protected static final int URANUS_TRIANGLE_COUNT = 2800;       // 天王星公转轨迹的三角个数
-    protected static final int NEPTUNE_TRIANGLE_COUNT = 3200;      // 海王星公转轨迹的三角个数
+    protected static final int VENUS_TRIANGLE_COUNT = 880;         // 金星公转轨迹的三角个数
+    protected static final int EARTH_TRIANGLE_COUNT = 1200;        // 地球公转轨迹的三角个数
+    protected static final int MARS_TRIANGLE_COUNT = 2300;         // 火星公转轨迹的三角个数
+    protected static final int JUPITER_TRIANGLE_COUNT = 5000;      // 木星公转轨迹的三角个数
+    protected static final int SATURN_TRIANGLE_COUNT = 7000;       // 土星公转轨迹的三角个数
+    protected static final int URANUS_TRIANGLE_COUNT = 9000;       // 天王星公转轨迹的三角个数
+    protected static final int NEPTUNE_TRIANGLE_COUNT = 12000;      // 海王星公转轨迹的三角个数
 
     // 行星自传速度(越大越快)
-    protected static final int MERCURY_ROTATE_ANGLE = 40;          // 水星自传角度
-    protected static final int VENUS_ROTATE_ANGLE = 35;            // 水星自传角度
-    protected static final int EARTH_ROTATE_ANGLE = 30;            // 地球自传角度
-    protected static final int MARS_ROTATE_ANGLE = 28;             // 火星自传角度
-    protected static final int JUPITER_ROTATE_ANGLE = 25;          // 木星自传角度
-    protected static final int SATURN_ROTATE_ANGLE = 23;           // 土星自传角度
-    protected static final int URANUS_ROTATE_ANGLE = 20;           // 天王星自传角度
-    protected static final int NEPTUNE_ROTATE_ANGLE = 16;          // 海王星自传角度
+    protected static final int MERCURY_ROTATE_ANGLE = 4;          // 水星自传角度
+    protected static final int VENUS_ROTATE_ANGLE = 1;            // 水星自传角度
+    protected static final int EARTH_ROTATE_ANGLE = 45;            // 地球自传角度
+    protected static final int MARS_ROTATE_ANGLE = 45;             // 火星自传角度
+    protected static final int JUPITER_ROTATE_ANGLE = 90;          // 木星自传角度
+    protected static final int SATURN_ROTATE_ANGLE = 92;           // 土星自传角度
+    protected static final int URANUS_ROTATE_ANGLE = 87;           // 天王星自传角度
+    protected static final int NEPTUNE_ROTATE_ANGLE = 88;          // 海王星自传角度
 
 //    protected float distance_em = 0.3f; // 月球中心距离地球中心距离
 
@@ -274,7 +274,7 @@ public class SolarSystemRender extends BaseRender {
 
     private float mEyeX = 0.0f;
     private float mEyeY = 0.0f;
-    private float mEyeZ = 25.0f;
+    private float mEyeZ = 30.0f;
 
     private float mNear = 20.0f;
     private float mFar = 100.0f;
