@@ -327,4 +327,9 @@ public class Planet {
         mRotateVec.y = vector.y;
         mRotateVec.z = vector.z;
     }
+
+    public Point getThisPoint(){
+        int curDrawIdx = mTrackIdx != 0 ? mTrackIdx - 1 : mTracks.size() - 1;
+        return mTracks.get(curDrawIdx);
+    }
 }
