@@ -307,6 +307,7 @@ public class Planet {
 
     public void setTranslate(){
         if(0 == mTracks.size()){
+            mMatrixUtil.setRotate(mRotateAngle, mRotateVec.x, mRotateVec.y, mRotateVec.z);
             return;
         }
 

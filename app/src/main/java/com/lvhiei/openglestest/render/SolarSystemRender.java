@@ -231,6 +231,7 @@ public class SolarSystemRender extends BaseRender {
     protected static final float MOON_RADIUS = 0.015f;             // 月亮半径
 
     // 行星公转半径
+    protected static final float SUN_TRACK_RADIUS = 0.0f;          // 太阳公转半径
     protected static final float MECURY_TRACK_RADIUS = 0.5f;       // 水星中心距离太阳中心距离
     protected static final float VENUS_TRACK_RADIUS = 0.65f;       // 金星中心距离太阳中心距离
     protected static final float EARTH_TRACK_RADIUS = 0.85f;        // 地球中心距离太阳中心距离
@@ -243,6 +244,7 @@ public class SolarSystemRender extends BaseRender {
     protected static final float MOON_TRACK_RADIUS = 0.100f;      // 月亮中心距离地球中心距离
 
     // 行星公转速度(越大越慢)
+    protected static final int SUN_TRIANGLE_COUNT = 0;             // 太阳公转轨迹的三角个数
     protected static final int MERCURY_TRIANGLE_COUNT = 300;       // 水星公转轨迹的三角个数
     protected static final int VENUS_TRIANGLE_COUNT = 880;         // 金星公转轨迹的三角个数
     protected static final int EARTH_TRIANGLE_COUNT = 1200;        // 地球公转轨迹的三角个数
@@ -255,6 +257,7 @@ public class SolarSystemRender extends BaseRender {
     protected static final int MOON_TRIANGLE_COUNT = 160;           // 月亮公转轨迹的三角个数
 
     // 行星自传速度(越大越快)
+    protected static final int SUN_ROTATE_ANGLE = 8;               // 太阳自传角度
     protected static final int MERCURY_ROTATE_ANGLE = 4;          // 水星自传角度
     protected static final int VENUS_ROTATE_ANGLE = 1;            // 水星自传角度
     protected static final int EARTH_ROTATE_ANGLE = 45;            // 地球自传角度
@@ -315,7 +318,7 @@ public class SolarSystemRender extends BaseRender {
     };
 
     private float[][] mPlanetFParams = {
-            {SUN_RADIUS, 0.0f,},
+            {SUN_RADIUS, SUN_TRACK_RADIUS,},
             {MERCURY_RADIUS, MECURY_TRACK_RADIUS, },
             {VENUS_RADIUS, VENUS_TRACK_RADIUS, },
             {EARTH_RADIUS, EARTH_TRACK_RADIUS, },
@@ -328,7 +331,7 @@ public class SolarSystemRender extends BaseRender {
     };
 
     private int[][] mPlanetIParams = {
-            {angleSpan, 0, 0},
+            {angleSpan, SUN_TRIANGLE_COUNT, SUN_ROTATE_ANGLE},
             {angleSpan, MERCURY_TRIANGLE_COUNT, MERCURY_ROTATE_ANGLE},
             {angleSpan, VENUS_TRIANGLE_COUNT, VENUS_ROTATE_ANGLE},
             {angleSpan, EARTH_TRIANGLE_COUNT, EARTH_ROTATE_ANGLE},
