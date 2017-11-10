@@ -15,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 
 public class SolarSystemRender extends BaseRender {
-    private static final String vertex_shader = "\n" +
+    protected static final String vertex_shader = "\n" +
             "attribute vec4 sun_Position;                  \n" +
             "attribute vec4 mercury_Position;                  \n" +
             "attribute vec4 venus_Position;                  \n" +
@@ -130,7 +130,7 @@ public class SolarSystemRender extends BaseRender {
             "}"
             ;
 
-    private static final String frag_shader = "\n" +
+    protected static final String frag_shader = "\n" +
             "precision mediump float;                \n" +
             "                                                       \n" +
             "uniform sampler2D u_sunTextureUnit;                                              \n" +
@@ -295,16 +295,16 @@ public class SolarSystemRender extends BaseRender {
         }
     };
 
-    private float mEyeX = 0.0f;
-    private float mEyeY = 0.0f;
-    private float mEyeZ = 30.0f;
+    protected float mEyeX = 0.0f;
+    protected float mEyeY = 0.0f;
+    protected float mEyeZ = 30.0f;
 
-    private float mNear = 20.0f;
-    private float mFar = 100.0f;
+    protected float mNear = 20.0f;
+    protected float mFar = 100.0f;
 
 
 
-    private String[][] mPlanetSParams = {
+    protected String[][] mPlanetSParams = {
             {"sun.bmp", "u_sunTextureUnit", "u_sunMatrix", "sun_Position", "sun_TextureCoordinates", "planet_type", },
             {"mercury.bmp", "u_mercuryTextureUnit", "u_mercuryMatrix", "mercury_Position", "mercury_TextureCoordinates", "planet_type", },
             {"venus.bmp", "u_venusTextureUnit", "u_venusMatrix", "venus_Position", "venus_TextureCoordinates", "planet_type", },
@@ -317,7 +317,7 @@ public class SolarSystemRender extends BaseRender {
             {"moon.bmp", "u_moonTextureUnit", "u_moonMatrix", "moon_Position", "moon_TextureCoordinates", "planet_type", },
     };
 
-    private float[][] mPlanetFParams = {
+    protected float[][] mPlanetFParams = {
             {SUN_RADIUS, SUN_TRACK_RADIUS,},
             {MERCURY_RADIUS, MECURY_TRACK_RADIUS, },
             {VENUS_RADIUS, VENUS_TRACK_RADIUS, },
@@ -330,7 +330,7 @@ public class SolarSystemRender extends BaseRender {
             {MOON_RADIUS, MOON_TRACK_RADIUS, },
     };
 
-    private int[][] mPlanetIParams = {
+    protected int[][] mPlanetIParams = {
             {angleSpan, SUN_TRIANGLE_COUNT, SUN_ROTATE_ANGLE},
             {angleSpan, MERCURY_TRIANGLE_COUNT, MERCURY_ROTATE_ANGLE},
             {angleSpan, VENUS_TRIANGLE_COUNT, VENUS_ROTATE_ANGLE},
@@ -343,17 +343,17 @@ public class SolarSystemRender extends BaseRender {
             {angleSpan, MOON_TRIANGLE_COUNT, MOON_ROTATE_ANGLE},
     };
 
-    private Planet mSun;
-    private Planet mMercury;
-    private Planet mVenus;
-    private Planet mEarth;
-    private Planet mMars;
-    private Planet mJupiter;
-    private Planet mSaturn;
-    private Planet mUranus;
-    private Planet mNeptune;
+    protected Planet mSun;
+    protected Planet mMercury;
+    protected Planet mVenus;
+    protected Planet mEarth;
+    protected Planet mMars;
+    protected Planet mJupiter;
+    protected Planet mSaturn;
+    protected Planet mUranus;
+    protected Planet mNeptune;
 
-    private Moon mMoon;
+    protected Moon mMoon;
 
     public SolarSystemRender(Context context) {
         super();

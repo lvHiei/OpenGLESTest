@@ -367,4 +367,47 @@ public class OpenGLUtils {
 		GLES20.glTexSubImage2D(GLES20.GL_TEXTURE_2D, 0, 0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, previewData);
 //		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 	}
+
+	public static int getMaxVertexAttributes(){
+		return getIntergerv(GLES20.GL_MAX_VERTEX_ATTRIBS);
+	}
+
+	public static int getMaxVectexUniforms(){
+		return getIntergerv(GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS);
+	}
+
+	public static int getMaxFragmentUniforms(){
+		return getIntergerv(GLES20.GL_MAX_FRAGMENT_UNIFORM_VECTORS);
+	}
+
+	public static int getMaxTextureSize(){
+		return getIntergerv(GLES20.GL_MAX_TEXTURE_SIZE);
+	}
+
+	public static int getMaxFragmentTextureImages(){
+		return getIntergerv(GLES20.GL_MAX_TEXTURE_IMAGE_UNITS);
+	}
+
+	public static int getMaxVaryings(){
+		return getIntergerv(GLES20.GL_MAX_VARYING_VECTORS);
+	}
+
+
+	public static int getIntergerv(int pname){
+		int[] max = new int[1];
+		GLES20.glGetIntegerv(pname, max, 0);
+		return max[0];
+	}
+
+	public static String getVersion(){
+		return GLES20.glGetString(GLES20.GL_VERSION);
+	}
+
+	public static String getVender(){
+		return GLES20.glGetString(GLES20.GL_VENDOR);
+	}
+
+	public static String getExtensions(){
+		return GLES20.glGetString(GLES20.GL_EXTENSIONS);
+	}
 }
