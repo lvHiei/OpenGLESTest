@@ -264,7 +264,7 @@ public class SolarSystemRender extends BaseRender {
     protected static final int URANUS_ROTATE_ANGLE = 87;           // 天王星自传角度
     protected static final int NEPTUNE_ROTATE_ANGLE = 88;          // 海王星自传角度
 
-    protected static final int MOON_ROTATE_ANGLE = 30;              // 月亮自传角度
+    protected static final int MOON_ROTATE_ANGLE = 0;              // 月亮自传角度
 
     protected Context mContext;
 

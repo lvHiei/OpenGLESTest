@@ -11,7 +11,6 @@ import com.lvhiei.openglestest.render.SunRender;
 
 public class Moon extends Planet {
     protected Planet mPlanet;   // 该卫星所绕的行星
-    protected Point mLastPoint = null;
 
     public Moon(Context context, int type, int texPos, String textName, String tname, String mname, String posName, String tcName, String typeName, float r, int angleSpan) {
         super(context, type, texPos, textName, tname, mname, posName, tcName, typeName, r, angleSpan);
@@ -31,24 +30,13 @@ public class Moon extends Planet {
             return;
         }
 
-        Point pp = new Point(mPlanet.getThisPoint());
+        Point pp = mPlanet.getThisPoint();
 
-        Point pm = new Point(mTracks.get(mTrackIdx));
-
-        pm.add(pp);
-        Point spm = new Point(pm);
-
-        if(mLastPoint != null){
-            spm.minus(mLastPoint);
-        }
+        Point pm = mTracks.get(mTrackIdx);
 
         mMatrixUtil.initTranslate();
         mMatrixUtil.setRotate(mRotateAngle, mRotateVec.x, mRotateVec.y, mRotateVec.z);
-        mMatrixUtil.setTranstate(pm.x, pm.y, pm.z);
-
-//        mMatrixUtil.setTranstate(spm.x, spm.y, spm.z);
-
-        mLastPoint = pm;
+        mMatrixUtil.setTranstate(pm.x + pp.x, pm.y + pp.y, pm.z + pp.z);
 
         ++mTrackIdx;
         if(mTrackIdx >= mTracks.size()){
