@@ -18,6 +18,8 @@ public class BaseRender implements IGLESRenderer {
 
     protected MatrixUtil mMatrixUtil = new MatrixUtil();
 
+    protected String mErrMsg = "";
+
     @Override
     public void setGLSurface(GLSurfaceView surface) {
         mSurfaceView = surface;
@@ -64,5 +66,10 @@ public class BaseRender implements IGLESRenderer {
 
     public MatrixUtil getMatrixUtil(){
         return mMatrixUtil;
+    }
+
+    public boolean isSupported(){
+        mErrMsg = "success";
+        return true;
     }
 }

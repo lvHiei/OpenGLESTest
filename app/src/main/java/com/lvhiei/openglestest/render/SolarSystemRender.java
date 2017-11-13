@@ -2,9 +2,16 @@ package com.lvhiei.openglestest.render;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.widget.Toast;
 
+import com.lvhiei.openglestest.log.ATLog;
 import com.lvhiei.openglestest.tool.Moon;
 import com.lvhiei.openglestest.tool.Planet;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -131,6 +138,176 @@ public class SolarSystemRender extends BaseRender {
             ;
 
     protected static final String frag_shader = "\n" +
+            "precision mediump float;                \n" +
+            "                                                       \n" +
+            "uniform sampler2D u_sunTextureUnit;                                              \n" +
+            "uniform sampler2D u_mercuryTextureUnit;                                              \n" +
+            "uniform sampler2D u_venusTextureUnit;                                              \n" +
+            "uniform sampler2D u_earthTextureUnit;                                              \n" +
+            "uniform sampler2D u_marsTextureUnit;                                              \n" +
+            "uniform sampler2D u_jupiterTextureUnit;                                              \n" +
+            "uniform sampler2D u_saturnTextureUnit;                                              \n" +
+            "uniform sampler2D u_uranusTextureUnit;                                              \n" +
+            "uniform sampler2D u_neptuneTextureUnit;                                              \n" +
+            "\n" +
+            "uniform sampler2D u_moonTextureUnit;                                              \n" +
+            "\n" +
+            "varying vec2 v_TextureCoordinates;                                              \n" +
+            "varying float planet_v;                                              \n" +
+            "\n" +
+            "const float SUN_TYPE = 0.0;                  \n" +
+            "const float MERCURY_TYPE = 1.0;                  \n" +
+            "const float VENUS_TYPE = 2.0;                  \n" +
+            "const float EARTH_TYPE = 3.0;                  \n" +
+            "const float MARS_TYPE = 4.0;                  \n" +
+            "const float JUPITER_TYPE = 5.0;                  \n" +
+            "const float SATURN_TYPE = 6.0;                  \n" +
+            "const float URANUS_TYPE = 7.0;                  \n" +
+            "const float NEPTUNE_TYPE = 8.0;                  \n" +
+            "\n" +
+            "const float MOON_TYPE = 9.0;                  \n" +
+            "\n" +
+            "bool isEqual(float x, float y)\n" +
+            "{\n" +
+            "    return abs(x - y) < 0.01;\n" +
+            "}                       \n" +
+            "                 \n" +
+            "void main()                                        \n" +
+            "{   \n" +
+            "    if(isEqual(planet_v, SUN_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_sunTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, MERCURY_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_mercuryTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, VENUS_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_venusTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, EARTH_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_earthTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, MARS_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_marsTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, JUPITER_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_jupiterTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, SATURN_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_saturnTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, URANUS_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_uranusTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, NEPTUNE_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_neptuneTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else if(isEqual(planet_v, MOON_TYPE))\n" +
+            "    {\n" +
+            "        gl_FragColor = texture2D(u_moonTextureUnit, v_TextureCoordinates);                                                        \n" +
+            "    }\n" +
+            "    else\n" +
+            "    {\n" +
+            "       gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n" +
+            "    }                                           \n" +
+            "}    "
+            ;
+
+    protected static final String vertex_shader_oneAttribute = "\n" +
+            "attribute vec4 planet_Position;                  \n" +
+            "\n" +
+            "attribute vec2 planet_TextureCoordinates;                  \n" +
+            "\n" +
+            "uniform  mat4 u_sunMatrix;                  \n" +
+            "uniform  mat4 u_mercuryMatrix;                  \n" +
+            "uniform  mat4 u_venusMatrix;                  \n" +
+            "uniform  mat4 u_earthMatrix;                  \n" +
+            "uniform  mat4 u_marsMatrix;                  \n" +
+            "uniform  mat4 u_jupiterMatrix;                  \n" +
+            "uniform  mat4 u_saturnMatrix;                  \n" +
+            "uniform  mat4 u_uranusMatrix;                  \n" +
+            "uniform  mat4 u_neptuneMatrix;                  \n" +
+            "\n" +
+            "uniform  mat4 u_moonMatrix;                  \n" +
+            "\n" +
+            "uniform  float planet_type;                  \n" +
+            "                            \n" +
+            "varying  vec2 v_TextureCoordinates;                  \n" +
+            "varying float planet_v;                                              \n" +
+            "\n" +
+            "const float SUN_TYPE = 0.0;                  \n" +
+            "const float MERCURY_TYPE = 1.0;                  \n" +
+            "const float VENUS_TYPE = 2.0;                  \n" +
+            "const float EARTH_TYPE = 3.0;                  \n" +
+            "const float MARS_TYPE = 4.0;                  \n" +
+            "const float JUPITER_TYPE = 5.0;                  \n" +
+            "const float SATURN_TYPE = 6.0;                  \n" +
+            "const float URANUS_TYPE = 7.0;                  \n" +
+            "const float NEPTUNE_TYPE = 8.0;                  \n" +
+            "\n" +
+            "const float MOON_TYPE = 9.0;                  \n" +
+            "                       \n" +
+            "bool isEqual(float x, float y)\n" +
+            "{\n" +
+            "    return abs(x - y) < 0.01;\n" +
+            "}                       \n" +
+            "                       \n" +
+            "void main()                                   \n" +
+            "{                                                         \n" +
+            "    if(isEqual(planet_type, SUN_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_sunMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, MERCURY_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_mercuryMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, VENUS_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_venusMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, EARTH_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_earthMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, MARS_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_marsMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, JUPITER_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_jupiterMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, SATURN_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_saturnMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, URANUS_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_uranusMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, NEPTUNE_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_neptuneMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    else if(isEqual(planet_type, MOON_TYPE))\n" +
+            "    {\n" +
+            "       gl_Position = u_moonMatrix * planet_Position;\n" +
+            "    }\n" +
+            "    v_TextureCoordinates = planet_TextureCoordinates;               \n" +
+            "    planet_v = planet_type;               \n" +
+            "}"
+            ;
+
+    protected static final String frag_shader_oneAttribute = "\n" +
             "precision mediump float;                \n" +
             "                                                       \n" +
             "uniform sampler2D u_sunTextureUnit;                                              \n" +
@@ -343,6 +520,20 @@ public class SolarSystemRender extends BaseRender {
             {angleSpan, MOON_TRIANGLE_COUNT, MOON_ROTATE_ANGLE},
     };
 
+
+    protected final int P_TEXTURES = mPlanetSParams.length;
+    protected final int P_VERTEX_UNIFORMS = P_TEXTURES * 2 + 1;
+    protected final int P_FRAGMETN_UNIFORMS = P_TEXTURES;
+    protected final int P_ATTRIBUTES = P_TEXTURES * 2;
+    protected final int P_VARYINGS = 2;
+    protected final int P_TEXUTRE_SIZE = 1440;
+
+    protected boolean mbUseMutiAttributes = true;
+    private FloatBuffer mVertexCoord;
+    private FloatBuffer mTextureCoord;
+
+    protected ATLog mLog = new ATLog(this.getClass().getName());
+
     protected Planet mSun;
     protected Planet mMercury;
     protected Planet mVenus;
@@ -354,6 +545,10 @@ public class SolarSystemRender extends BaseRender {
     protected Planet mNeptune;
 
     protected Moon mMoon;
+
+    protected Planet[] mPlanets;
+
+
 
     public SolarSystemRender(Context context) {
         super();
@@ -379,6 +574,20 @@ public class SolarSystemRender extends BaseRender {
         mNeptune = createPlanet(row++);
 
         mMoon = createMoon(row++, mEarth);
+
+        mPlanets = new Planet[row];
+        row = 0;
+        mPlanets[row++] = mSun;
+        mPlanets[row++] = mMercury;
+        mPlanets[row++] = mVenus;
+        mPlanets[row++] = mEarth;
+        mPlanets[row++] = mMars;
+        mPlanets[row++] = mJupiter;
+        mPlanets[row++] = mSaturn;
+        mPlanets[row++] = mUranus;
+        mPlanets[row++] = mNeptune;
+
+        mPlanets[row++] = mMoon;
     }
 
     protected Planet createPlanet(int row){
@@ -418,51 +627,121 @@ public class SolarSystemRender extends BaseRender {
         float y = 0.0f;
         float z = 0.0f;
 
-        mMercury.initTracks(x, y, z);
-        mVenus.initTracks(x, y, z);
-        mEarth.initTracks(x, y, z);
-        mMars.initTracks(x, y, z);
-        mJupiter.initTracks(x, y, z);
-        mSaturn.initTracks(x, y, z);
-        mUranus.initTracks(x, y, z);
-        mNeptune.initTracks(x, y, z);
+//        mMercury.initTracks(x, y, z);
+//        mVenus.initTracks(x, y, z);
+//        mEarth.initTracks(x, y, z);
+//        mMars.initTracks(x, y, z);
+//        mJupiter.initTracks(x, y, z);
+//        mSaturn.initTracks(x, y, z);
+//        mUranus.initTracks(x, y, z);
+//        mNeptune.initTracks(x, y, z);
+//
+//        mMoon.initTracks(x, y, z);
 
-        mMoon.initTracks(x, y, z);
+        for(int i = 0; i < mPlanets.length; ++i){
+            mPlanets[i].initTracks(x, y, z);
+        }
     }
 
     protected void initAllCoordinate() {
-        mSun.initCoordinates();
-        mMercury.initCoordinates();
-        mVenus.initCoordinates();
-        mEarth.initCoordinates();
-        mMars.initCoordinates();
-        mJupiter.initCoordinates();
-        mSaturn.initCoordinates();
-        mUranus.initCoordinates();
-        mNeptune.initCoordinates();
+//        mSun.initCoordinates();
+//        mMercury.initCoordinates();
+//        mVenus.initCoordinates();
+//        mEarth.initCoordinates();
+//        mMars.initCoordinates();
+//        mJupiter.initCoordinates();
+//        mSaturn.initCoordinates();
+//        mUranus.initCoordinates();
+//        mNeptune.initCoordinates();
+//
+//        mMoon.initCoordinates();
 
-        mMoon.initCoordinates();
+        for(int i = 0; i < mPlanets.length; ++i){
+            mPlanets[i].initCoordinates();
+        }
+    }
+
+    protected void onUseOneAttribute(){
+        int vertexSize = 0;
+        int textureSize = 0;
+        for(int i = 0; i < mPlanets.length; ++i){
+            vertexSize += mPlanets[i].getVertexs().size();
+            textureSize += mPlanets[i].getTextures().size();
+        }
+
+        float vertices[] = new float[vertexSize];
+        float textures[] = new float[textureSize];
+        int voffset = 0;
+        int toffset = 0;
+        for(int k = 0; k < mPlanets.length; ++k){
+            ArrayList<Float> vertexArr = mPlanets[k].getVertexs();
+            ArrayList<Float> textureArr = mPlanets[k].getTextures();
+            for (int i = 0; i < vertexArr.size(); i++) {
+                vertices[i + voffset] = vertexArr.get(i);
+            }
+
+            for (int i = 0; i < textureArr.size(); i++) {
+                textures[i + toffset] = textureArr.get(i);
+            }
+
+            voffset += vertexArr.size();
+            toffset += textureArr.size();
+        }
+
+        mVertexCoord = ByteBuffer.allocateDirect(vertices.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        mVertexCoord.put(vertices);
+        mVertexCoord.position(0);
+
+        mTextureCoord = ByteBuffer.allocateDirect(textures.length * 4)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        mTextureCoord.put(textures);
+        mTextureCoord.position(0);
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
+        if(!isSupported()){
+            String err = String.format("your phone is not supported,err:%s", mErrMsg);
+            Toast.makeText(mContext, err, Toast.LENGTH_LONG).show();
+        }
+
+        if(mbUseMutiAttributes){
+            mProgram = OpenGLUtils.loadProgram(vertex_shader, frag_shader);
+        }else{
+            mProgram = OpenGLUtils.loadProgram(vertex_shader_oneAttribute, frag_shader_oneAttribute);
+            onUseOneAttribute();
+
+            int mPostionLoc = GLES20.glGetAttribLocation(mProgram, "planet_Position");
+            GLES20.glVertexAttribPointer(mPostionLoc, 3, GLES20.GL_FLOAT, false, 0, mVertexCoord);
+            GLES20.glEnableVertexAttribArray(mPostionLoc);
+
+            int mTextureCoordLoc = GLES20.glGetAttribLocation(mProgram, "planet_TextureCoordinates");
+            GLES20.glVertexAttribPointer(mTextureCoordLoc, 2, GLES20.GL_FLOAT, false, 0, mTextureCoord);
+            GLES20.glEnableVertexAttribArray(mTextureCoordLoc);
+        }
         GLES20.glUseProgram(mProgram);
 //        GLES20.glDepthRangef(20, 100);
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-        mSun.onSurfaceCreated(gl, config, mProgram);
-        mMercury.onSurfaceCreated(gl, config, mProgram);
-        mVenus.onSurfaceCreated(gl, config, mProgram);
-        mEarth.onSurfaceCreated(gl, config, mProgram);
-        mMars.onSurfaceCreated(gl, config, mProgram);
-        mJupiter.onSurfaceCreated(gl, config, mProgram);
-        mSaturn.onSurfaceCreated(gl, config, mProgram);
-        mUranus.onSurfaceCreated(gl, config, mProgram);
-        mNeptune.onSurfaceCreated(gl, config, mProgram);
+//        mSun.onSurfaceCreated(gl, config, mProgram);
+//        mMercury.onSurfaceCreated(gl, config, mProgram);
+//        mVenus.onSurfaceCreated(gl, config, mProgram);
+//        mEarth.onSurfaceCreated(gl, config, mProgram);
+//        mMars.onSurfaceCreated(gl, config, mProgram);
+//        mJupiter.onSurfaceCreated(gl, config, mProgram);
+//        mSaturn.onSurfaceCreated(gl, config, mProgram);
+//        mUranus.onSurfaceCreated(gl, config, mProgram);
+//        mNeptune.onSurfaceCreated(gl, config, mProgram);
+//
+//        mMoon.onSurfaceCreated(gl, config, mProgram);
 
-        mMoon.onSurfaceCreated(gl, config, mProgram);
+        for(int i = 0; i < mPlanets.length; ++i){
+            mPlanets[i].onSurfaceCreated(gl, config, mProgram);
+        }
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
@@ -471,34 +750,43 @@ public class SolarSystemRender extends BaseRender {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         super.onSurfaceChanged(gl, width, height);
         projectFrustumMatrix(width, height);
-        mSun.onSurfaceChanged(gl, width, height);
-        mMercury.onSurfaceChanged(gl, width, height);
-        mVenus.onSurfaceChanged(gl, width, height);
-        mEarth.onSurfaceChanged(gl, width, height);
-        mMars.onSurfaceChanged(gl, width, height);
-        mJupiter.onSurfaceChanged(gl, width, height);
-        mSaturn.onSurfaceChanged(gl, width, height);
-        mUranus.onSurfaceChanged(gl, width, height);
-        mNeptune.onSurfaceChanged(gl, width, height);
+//        mSun.onSurfaceChanged(gl, width, height);
+//        mMercury.onSurfaceChanged(gl, width, height);
+//        mVenus.onSurfaceChanged(gl, width, height);
+//        mEarth.onSurfaceChanged(gl, width, height);
+//        mMars.onSurfaceChanged(gl, width, height);
+//        mJupiter.onSurfaceChanged(gl, width, height);
+//        mSaturn.onSurfaceChanged(gl, width, height);
+//        mUranus.onSurfaceChanged(gl, width, height);
+//        mNeptune.onSurfaceChanged(gl, width, height);
+//
+//        mMoon.onSurfaceChanged(gl, width, height);
 
-        mMoon.onSurfaceChanged(gl, width, height);
+        for(int i = 0; i < mPlanets.length; ++i){
+            mPlanets[i].onSurfaceChanged(gl, width, height);
+        }
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
 
-        mSun.onDrawFrame(gl);
-        mMercury.onDrawFrame(gl);
-        mVenus.onDrawFrame(gl);
-        mEarth.onDrawFrame(gl);
-        mMars.onDrawFrame(gl);
-        mJupiter.onDrawFrame(gl);
-        mSaturn.onDrawFrame(gl);
-        mUranus.onDrawFrame(gl);
-        mNeptune.onDrawFrame(gl);
-
-        mMoon.onDrawFrame(gl);
+//        mSun.onDrawFrame(gl);
+//        mMercury.onDrawFrame(gl);
+//        mVenus.onDrawFrame(gl);
+//        mEarth.onDrawFrame(gl);
+//        mMars.onDrawFrame(gl);
+//        mJupiter.onDrawFrame(gl);
+//        mSaturn.onDrawFrame(gl);
+//        mUranus.onDrawFrame(gl);
+//        mNeptune.onDrawFrame(gl);
+//
+//        mMoon.onDrawFrame(gl);
+        int offset = 0;
+        for(int i = 0; i < mPlanets.length; ++i){
+            mPlanets[i].onDrawFrame(gl, offset);
+            offset += mPlanets[i].getVertexPointCount();
+        }
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
@@ -508,17 +796,21 @@ public class SolarSystemRender extends BaseRender {
     @Override
     protected void localReleaseGL() {
         super.localReleaseGL();
-        mSun.releaseGL();
-        mMercury.releaseGL();
-        mVenus.releaseGL();
-        mEarth.releaseGL();
-        mMars.releaseGL();
-        mJupiter.releaseGL();
-        mSaturn.releaseGL();
-        mUranus.releaseGL();
-        mNeptune.releaseGL();
+//        mSun.releaseGL();
+//        mMercury.releaseGL();
+//        mVenus.releaseGL();
+//        mEarth.releaseGL();
+//        mMars.releaseGL();
+//        mJupiter.releaseGL();
+//        mSaturn.releaseGL();
+//        mUranus.releaseGL();
+//        mNeptune.releaseGL();
+//
+//        mMoon.releaseGL();
 
-        mMoon.releaseGL();
+        for(int i = 0; i < mPlanets.length; ++i){
+            mPlanets[i].releaseGL();
+        }
     }
 
     @Override
@@ -547,6 +839,55 @@ public class SolarSystemRender extends BaseRender {
             mRendererThread = new Thread(mRunnable);
             mRendererThread.start();
         }
+    }
+
+
+    @Override
+    public boolean isSupported() {
+        int maxvu = OpenGLUtils.getMaxVectexUniforms();
+        int maxfu = OpenGLUtils.getMaxFragmentUniforms();
+        int maxvarying = OpenGLUtils.getMaxVaryings();
+        int maxts = OpenGLUtils.getMaxTextureSize();
+        int maxat = OpenGLUtils.getMaxVertexAttributes();
+        int maxtis = OpenGLUtils.getMaxFragmentTextureImages();
+
+        if(maxvu < P_VERTEX_UNIFORMS){
+            mErrMsg = String.format("maxvu less than needed, max:%d,need:%d", maxvu, P_VERTEX_UNIFORMS);
+            mLog.error(mErrMsg);
+            return false;
+        }
+
+        if(maxfu < P_FRAGMETN_UNIFORMS){
+            mErrMsg = String.format("maxfu less than needed, max:%d,need:%d", maxfu, P_FRAGMETN_UNIFORMS);
+            mLog.error(mErrMsg);
+            return false;
+        }
+
+        if(maxvarying < P_VARYINGS){
+            mErrMsg = String.format("maxvarying less than needed, max:%d,need:%d", maxvarying, P_VARYINGS);
+            mLog.error(mErrMsg);
+            return false;
+        }
+
+        if(maxtis < P_TEXTURES){
+            mErrMsg = String.format("maxtis less than needed, max:%d,need:%d", maxtis, P_TEXTURES);
+            mLog.error(mErrMsg);
+            return false;
+        }
+
+        if(maxts < P_TEXUTRE_SIZE){
+            mErrMsg = String.format("maxts less than needed, max:%d,need:%d", maxts, P_TEXUTRE_SIZE);
+            mLog.error(mErrMsg);
+            return false;
+        }
+
+        if(maxat < P_ATTRIBUTES){
+            mLog.warn("maxat less than needed, max:%d,need:%d, change to oneAttribute", maxat, P_ATTRIBUTES);
+            mbUseMutiAttributes = false;
+            Planet.setEnableMutiAttribute(mbUseMutiAttributes);
+        }
+
+        return true;
     }
 
     protected void draw(){
@@ -608,4 +949,5 @@ public class SolarSystemRender extends BaseRender {
     public float getFar(){
         return mFar;
     }
+
 }

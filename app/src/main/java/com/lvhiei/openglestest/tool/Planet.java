@@ -63,7 +63,7 @@ public class Planet {
 
     protected Vector3 mRotateVec;               // 自传轴
 
-
+    protected static boolean mbUseMutiAttribute = true;
     protected Context mContext;
 
     public Planet(Context context, int type, int texPos, String textName, String tname, String mname, String posName, String tcName, String typeName, float r, int angleSpan){
@@ -228,6 +228,10 @@ public class Planet {
      * @param z 圆心z
      */
     public void initTracks(float x, float y, float z){
+        if(mTrackTriangleCount <= 0){
+            return;
+        }
+
         mTracks.clear();
 //
 //        // 轨迹在xz平面
@@ -259,6 +263,10 @@ public class Planet {
         return mVertexs;
     }
 
+    public long getVertexPointCount(){
+        return mVertexCount;
+    }
+
     public ArrayList<Float> getTextures(){
         return mTexCoords;
     }
@@ -268,13 +276,15 @@ public class Planet {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config, int program){
-        mPostionLoc = GLES20.glGetAttribLocation(program, maPositionName);
-        GLES20.glVertexAttribPointer(mPostionLoc, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, 0, mVertexCoord);
-        GLES20.glEnableVertexAttribArray(mPostionLoc);
+        if(mbUseMutiAttribute){
+            mPostionLoc = GLES20.glGetAttribLocation(program, maPositionName);
+            GLES20.glVertexAttribPointer(mPostionLoc, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, 0, mVertexCoord);
+            GLES20.glEnableVertexAttribArray(mPostionLoc);
 
-        mTextureCoordLoc = GLES20.glGetAttribLocation(program, maTextureCoodName);
-        GLES20.glVertexAttribPointer(mTextureCoordLoc, COORDS_PER_TEXCOORD, GLES20.GL_FLOAT, false, 0, mTextureCoord);
-        GLES20.glEnableVertexAttribArray(mTextureCoordLoc);
+            mTextureCoordLoc = GLES20.glGetAttribLocation(program, maTextureCoodName);
+            GLES20.glVertexAttribPointer(mTextureCoordLoc, COORDS_PER_TEXCOORD, GLES20.GL_FLOAT, false, 0, mTextureCoord);
+            GLES20.glEnableVertexAttribArray(mTextureCoordLoc);
+        }
 
         mTextureLoc = GLES20.glGetUniformLocation(program, muTextureName);
         mMatrixLoc = GLES20.glGetUniformLocation(program, muMatrixName);
@@ -286,7 +296,11 @@ public class Planet {
     public void onSurfaceChanged(GL10 gl, int width, int height){
     }
 
-    public void onDrawFrame(GL10 gl){
+    public void onDrawFrame(GL10 gl, int offset){
+        if(mbUseMutiAttribute){
+            offset = 0;
+        }
+
         setTranslate();
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + mTexturePosition);
@@ -295,7 +309,7 @@ public class Planet {
         GLES20.glUniform1f(mTypeLoc, mPlanetType*1.0f);
         GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, mVertexCount);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, offset, mVertexCount);
     }
 
     public void releaseGL(){
@@ -332,5 +346,9 @@ public class Planet {
     public Point getThisPoint(){
         int curDrawIdx = mTrackIdx != 0 ? mTrackIdx - 1 : mTracks.size() - 1;
         return mTracks.get(curDrawIdx);
+    }
+
+    public static void setEnableMutiAttribute(boolean enableMutiAttribute){
+        mbUseMutiAttribute = enableMutiAttribute;
     }
 }
