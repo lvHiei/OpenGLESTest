@@ -627,35 +627,12 @@ public class SolarSystemRender extends BaseRender {
         float y = 0.0f;
         float z = 0.0f;
 
-//        mMercury.initTracks(x, y, z);
-//        mVenus.initTracks(x, y, z);
-//        mEarth.initTracks(x, y, z);
-//        mMars.initTracks(x, y, z);
-//        mJupiter.initTracks(x, y, z);
-//        mSaturn.initTracks(x, y, z);
-//        mUranus.initTracks(x, y, z);
-//        mNeptune.initTracks(x, y, z);
-//
-//        mMoon.initTracks(x, y, z);
-
         for(int i = 0; i < mPlanets.length; ++i){
             mPlanets[i].initTracks(x, y, z);
         }
     }
 
     protected void initAllCoordinate() {
-//        mSun.initCoordinates();
-//        mMercury.initCoordinates();
-//        mVenus.initCoordinates();
-//        mEarth.initCoordinates();
-//        mMars.initCoordinates();
-//        mJupiter.initCoordinates();
-//        mSaturn.initCoordinates();
-//        mUranus.initCoordinates();
-//        mNeptune.initCoordinates();
-//
-//        mMoon.initCoordinates();
-
         for(int i = 0; i < mPlanets.length; ++i){
             mPlanets[i].initCoordinates();
         }
@@ -727,18 +704,6 @@ public class SolarSystemRender extends BaseRender {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-//        mSun.onSurfaceCreated(gl, config, mProgram);
-//        mMercury.onSurfaceCreated(gl, config, mProgram);
-//        mVenus.onSurfaceCreated(gl, config, mProgram);
-//        mEarth.onSurfaceCreated(gl, config, mProgram);
-//        mMars.onSurfaceCreated(gl, config, mProgram);
-//        mJupiter.onSurfaceCreated(gl, config, mProgram);
-//        mSaturn.onSurfaceCreated(gl, config, mProgram);
-//        mUranus.onSurfaceCreated(gl, config, mProgram);
-//        mNeptune.onSurfaceCreated(gl, config, mProgram);
-//
-//        mMoon.onSurfaceCreated(gl, config, mProgram);
-
         for(int i = 0; i < mPlanets.length; ++i){
             mPlanets[i].onSurfaceCreated(gl, config, mProgram);
         }
@@ -750,17 +715,6 @@ public class SolarSystemRender extends BaseRender {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         super.onSurfaceChanged(gl, width, height);
         projectFrustumMatrix(width, height);
-//        mSun.onSurfaceChanged(gl, width, height);
-//        mMercury.onSurfaceChanged(gl, width, height);
-//        mVenus.onSurfaceChanged(gl, width, height);
-//        mEarth.onSurfaceChanged(gl, width, height);
-//        mMars.onSurfaceChanged(gl, width, height);
-//        mJupiter.onSurfaceChanged(gl, width, height);
-//        mSaturn.onSurfaceChanged(gl, width, height);
-//        mUranus.onSurfaceChanged(gl, width, height);
-//        mNeptune.onSurfaceChanged(gl, width, height);
-//
-//        mMoon.onSurfaceChanged(gl, width, height);
 
         for(int i = 0; i < mPlanets.length; ++i){
             mPlanets[i].onSurfaceChanged(gl, width, height);
@@ -771,17 +725,6 @@ public class SolarSystemRender extends BaseRender {
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
 
-//        mSun.onDrawFrame(gl);
-//        mMercury.onDrawFrame(gl);
-//        mVenus.onDrawFrame(gl);
-//        mEarth.onDrawFrame(gl);
-//        mMars.onDrawFrame(gl);
-//        mJupiter.onDrawFrame(gl);
-//        mSaturn.onDrawFrame(gl);
-//        mUranus.onDrawFrame(gl);
-//        mNeptune.onDrawFrame(gl);
-//
-//        mMoon.onDrawFrame(gl);
         int offset = 0;
         for(int i = 0; i < mPlanets.length; ++i){
             mPlanets[i].onDrawFrame(gl, offset);
@@ -796,17 +739,6 @@ public class SolarSystemRender extends BaseRender {
     @Override
     protected void localReleaseGL() {
         super.localReleaseGL();
-//        mSun.releaseGL();
-//        mMercury.releaseGL();
-//        mVenus.releaseGL();
-//        mEarth.releaseGL();
-//        mMars.releaseGL();
-//        mJupiter.releaseGL();
-//        mSaturn.releaseGL();
-//        mUranus.releaseGL();
-//        mNeptune.releaseGL();
-//
-//        mMoon.releaseGL();
 
         for(int i = 0; i < mPlanets.length; ++i){
             mPlanets[i].releaseGL();
