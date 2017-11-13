@@ -434,15 +434,15 @@ public class SolarSystemRender extends BaseRender {
     protected static final int MOON_TRIANGLE_COUNT = 160;           // 月亮公转轨迹的三角个数
 
     // 行星自传速度(越大越快)
-    protected static final int SUN_ROTATE_ANGLE = 8;               // 太阳自传角度
-    protected static final int MERCURY_ROTATE_ANGLE = 4;          // 水星自传角度
-    protected static final int VENUS_ROTATE_ANGLE = 1;            // 水星自传角度
-    protected static final int EARTH_ROTATE_ANGLE = 45;            // 地球自传角度
-    protected static final int MARS_ROTATE_ANGLE = 45;             // 火星自传角度
-    protected static final int JUPITER_ROTATE_ANGLE = 90;          // 木星自传角度
-    protected static final int SATURN_ROTATE_ANGLE = 92;           // 土星自传角度
-    protected static final int URANUS_ROTATE_ANGLE = 87;           // 天王星自传角度
-    protected static final int NEPTUNE_ROTATE_ANGLE = 88;          // 海王星自传角度
+    protected static final int SUN_ROTATE_ANGLE = 12;               // 太阳自传角度
+    protected static final int MERCURY_ROTATE_ANGLE = 10;          // 水星自传角度
+    protected static final int VENUS_ROTATE_ANGLE = 8;            // 金星自传角度
+    protected static final int EARTH_ROTATE_ANGLE = 15;            // 地球自传角度
+    protected static final int MARS_ROTATE_ANGLE = 15;             // 火星自传角度
+    protected static final int JUPITER_ROTATE_ANGLE = 25;          // 木星自传角度
+    protected static final int SATURN_ROTATE_ANGLE = 25;           // 土星自传角度
+    protected static final int URANUS_ROTATE_ANGLE = 24;           // 天王星自传角度
+    protected static final int NEPTUNE_ROTATE_ANGLE = 24;          // 海王星自传角度
 
     protected static final int MOON_ROTATE_ANGLE = 0;              // 月亮自传角度
 
