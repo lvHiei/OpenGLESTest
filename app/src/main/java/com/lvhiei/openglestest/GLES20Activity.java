@@ -101,6 +101,9 @@ public class GLES20Activity extends Activity {
                     }else if(mRenderId == R.id.btn_drawSolarSystem){
                         ((SolarSystemRender)mRender).addEyeY();
                         genText();
+                    }else if(mRenderId == R.id.btn_textureSquare){
+                        mRender.getMatrixUtil().setRotate(5, 0, 0, 1);
+                        mSurfaceView.requestRender();
                     }
                     break;
                 }

@@ -17,6 +17,12 @@ public class MatrixUtil {
 
 
     public MatrixUtil(){
+        init();
+    }
+
+    public void init(){
+        Matrix.setIdentityM(mVMatrix, 0);
+        Matrix.setIdentityM(mProjectMatrix, 0);
         initTRS();
     }
 
@@ -49,6 +55,10 @@ public class MatrixUtil {
      */
     public static void setProjectFrustum(float left, float right, float bottom, float top, float near, float far){
         Matrix.frustumM(mProjectMatrix, 0, left, right, bottom, top, near, far);
+    }
+
+    public static void setProjectOrthom(float left, float right, float bottom, float top, float near, float far){
+        Matrix.orthoM(mProjectMatrix, 0, left, right, bottom, top, near, far);
     }
 
     /**

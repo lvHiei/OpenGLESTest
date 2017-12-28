@@ -2,7 +2,6 @@ package com.lvhiei.openglestest.render;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import java.nio.ByteBuffer;
@@ -116,6 +115,9 @@ public class TextureSquareRender extends BaseRender{
             Matrix.orthoM(mProjectionMatrix, 0, -1f, 1f, -aspectRatio, aspectRatio, -1f, 1f);
 //            Matrix.orthoM(mProjectionMatrix, 0, -1f, 1f, -1, 1, -1f, 1f);
         }
+
+        mMatrixUtil.setProjectOrthom(-1f, 1f, -aspectRatio, aspectRatio, -1f, 1f);
+        mMatrixUtil.setRotate(0, 0, 0, 1.0f);
     }
 
 
@@ -147,7 +149,8 @@ public class TextureSquareRender extends BaseRender{
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         super.onSurfaceChanged(gl, width, height);
         projectionMatrix(width, height);
-        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mProjectionMatrix, 0);
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
+//        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mProjectionMatrix, 0);
     }
 
     @Override
@@ -157,6 +160,7 @@ public class TextureSquareRender extends BaseRender{
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
         GLES20.glUniform1i(mTextureLoc, 0);
+        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 4);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
