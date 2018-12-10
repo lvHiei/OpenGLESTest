@@ -95,6 +95,13 @@
                 android:text="textureSquare"/>
 
             <Button
+                android:id="@+id/btn_testBlitFrameBuffer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="testBlitFrameBuffer"/>
+
+            <Button
                 android:id="@+id/btn_textureCube"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

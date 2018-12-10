@@ -24,6 +24,7 @@ import com.lvhiei.openglestest.render.ScaleCubeRender;
 import com.lvhiei.openglestest.render.SolarSystemRender;
 import com.lvhiei.openglestest.render.SquareRender;
 import com.lvhiei.openglestest.render.SunRender;
+import com.lvhiei.openglestest.render.TestBlitFrameBufferRender;
 import com.lvhiei.openglestest.render.TextureBallRender;
 import com.lvhiei.openglestest.render.TextureCubeRender;
 import com.lvhiei.openglestest.render.TextureSquareRender;
@@ -191,6 +192,10 @@ public class GLES20Activity extends Activity {
 
             case R.id.btn_textureSquare:
                 mRender = new TextureSquareRender(this);
+//                mbLandScape = true;
+                break;
+            case R.id.btn_testBlitFrameBuffer:
+                mRender = new TestBlitFrameBufferRender(this);
 //                mbLandScape = true;
                 break;
             case R.id.btn_textureCube:
