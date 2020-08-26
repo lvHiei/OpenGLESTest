@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void initCtrl(){
+        findViewById(R.id.btn_rawimage).setOnClickListener(mListener);
         findViewById(R.id.btn_firstGLESPrograme).setOnClickListener(mListener);
         findViewById(R.id.btn_drawTriangle).setOnClickListener(mListener);
         findViewById(R.id.btn_drawSquare).setOnClickListener(mListener);

@@ -26,6 +26,11 @@ public class MatrixUtil {
         initTRS();
     }
 
+    public float[] getIdentityMatrix(){
+        float[] matrix = new float[16];
+        Matrix.setIdentityM(matrix, 0);
+        return matrix;
+    }
     public void initTRS(){
         Matrix.setIdentityM(mtMatrix, 0);
         Matrix.setIdentityM(mrMatrix, 0);

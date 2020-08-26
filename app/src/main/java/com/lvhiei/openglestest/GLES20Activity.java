@@ -19,6 +19,7 @@ import com.lvhiei.openglestest.render.CubeRender;
 import com.lvhiei.openglestest.render.FirstProgramRender;
 import com.lvhiei.openglestest.render.IGLESRenderer;
 import com.lvhiei.openglestest.render.MatrixUtil;
+import com.lvhiei.openglestest.render.RawImageViewRender;
 import com.lvhiei.openglestest.render.RotateCubeRender;
 import com.lvhiei.openglestest.render.ScaleCubeRender;
 import com.lvhiei.openglestest.render.SolarSystemRender;
@@ -104,6 +105,9 @@ public class GLES20Activity extends Activity {
                         genText();
                     }else if(mRenderId == R.id.btn_textureSquare){
                         mRender.getMatrixUtil().setRotate(5, 0, 0, 1);
+                        mSurfaceView.requestRender();
+                    }else if(mRenderId == R.id.btn_rawimage){
+                        ((RawImageViewRender)mRender).updateTexture();
                         mSurfaceView.requestRender();
                     }
                     break;
@@ -214,6 +218,10 @@ public class GLES20Activity extends Activity {
                 mRender = new SolarSystemRender(this);
                 genText();
                 mbLandScape = true;
+                break;
+
+            case R.id.btn_rawimage:
+                mRender = new RawImageViewRender(this, 368, 640);
                 break;
             default:
                 mRender = new FirstProgramRender();
