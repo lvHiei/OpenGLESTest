@@ -78,6 +78,10 @@ public class RawImageViewRender extends BaseRender {
     private int mImageHeight;
     private int mImageSize;
     private ByteBuffer mRGBABuffer = null;
+    private int mViewWidth;
+    private int mViewHeight;
+    private int x;
+    private int y;
 
     private String mRawdataPath = "/sdcard/opengltest/";
     private String mRawDataName = "raw.rgba";
@@ -93,6 +97,7 @@ public class RawImageViewRender extends BaseRender {
         mRGBABuffer = ByteBuffer.allocate(mImageSize);
         initCoordinate();
         initRawImage();
+//        createTestData();
     }
 
     public void updateTexture(){
@@ -105,6 +110,40 @@ public class RawImageViewRender extends BaseRender {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createTestData(){
+        try {
+            FileOutputStream outputStream = new FileOutputStream(mRawData);
+            for(int type = 0; type < 3; ++type){
+                for(int i = 0; i < mImageHeight; ++i){
+                    for (int j = 0; j < mImageWidth; ++j){
+                        int r =  0x00;
+                        int g = 0x00;
+                        int b = 0x00;
+                        int a =  0xff;
+
+                        if(type == 0){
+                            r = 0xff;
+                        }else if(type == 1){
+                            g = 0xff;
+                        }else{
+                            b = 0xff;
+                        }
+
+                        outputStream.write(r);
+                        outputStream.write(g);
+                        outputStream.write(b);
+                        outputStream.write(a);
+                    }
+                }
+            }
+
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void closeRawImage(){
@@ -200,6 +239,8 @@ public class RawImageViewRender extends BaseRender {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         super.onSurfaceChanged(gl, width, height);
+        mViewWidth = width;
+        mViewHeight = height;
         projectionMatrix(width, height);
         GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
 //        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mProjectionMatrix, 0);
@@ -208,7 +249,9 @@ public class RawImageViewRender extends BaseRender {
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        GLES20.glViewport(0, 0, mImageWidth, mImageHeight);
+        x = (mViewWidth - mImageWidth) / 2;
+        y = (mViewHeight - mImageHeight) / 2;
+        GLES20.glViewport(x , y, mImageWidth, mImageHeight);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, mImageWidth, mImageHeight,
