@@ -45,17 +45,17 @@ public class RawImageViewRender extends BaseRender {
 
 
     private static final float[] Points = {
-//            // triangle fan
-//            -0.5f, 0.5f,
-//            -0.5f, -0.5f,
-//            0.5f, -0.5f,
-//            0.5f, 0.5f,
-
-            // triangle strip
+            // triangle fan
+            -1.0f, 1.0f,
             -1.0f, -1.0f,
             1.0f, -1.0f,
-            -1.0f, 1.0f,
             1.0f, 1.0f,
+
+//            // triangle strip
+//            -1.0f, 1.0f,
+//            1.0f, 1.0f,
+//            1.0f, -1.0f,
+//            -1.0f, -1.0f,
     };
 
 
@@ -258,7 +258,7 @@ public class RawImageViewRender extends BaseRender {
                 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, mRGBABuffer);
         GLES20.glUniform1i(mTextureLoc, 0);
         GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getIdentityMatrix(), 0);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 4);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
