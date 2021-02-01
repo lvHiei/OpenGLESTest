@@ -221,7 +221,7 @@ public class GLES20Activity extends Activity {
                 break;
 
             case R.id.btn_rawimage:
-                mRender = new RawImageViewRender(this, 368, 640);
+                mRender = new RawImageViewRender(this, 720, 1280);
                 break;
             default:
                 mRender = new FirstProgramRender();

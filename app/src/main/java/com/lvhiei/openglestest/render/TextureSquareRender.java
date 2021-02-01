@@ -3,6 +3,7 @@ package com.lvhiei.openglestest.render;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -151,14 +152,51 @@ public class TextureSquareRender extends BaseRender{
         projectionMatrix(width, height);
         GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
 //        GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mProjectionMatrix, 0);
+        int[] tex = new int[1];
+        GLES20.glGenTextures(1, tex, 0);
+        testTexture = tex[0];
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
     }
+
+    private long textImageCost = 0;
+    private long totaltextImageCost = 0;
+    private long textSubImageCost = 0;
+    private long totaltextSubImageCost = 0;
+
+    private static final int loop_cout = 100;
+    private static final int width = 512;
+    private static final int height = 512;
+    private ByteBuffer buffer = ByteBuffer.allocateDirect(width * height * 4);
+    private int testTexture = 0;
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
+
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
+
+        GLES20.glFinish();
+        long begin = System.currentTimeMillis();
+        for(int i = 0; i < loop_cout; ++i){
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
+            GLES20.glFinish();
+        }
+        long t1 = System.currentTimeMillis();
+        textImageCost = t1 - begin;
+
+        for(int i = 0; i < loop_cout; ++i){
+            GLES20.glTexSubImage2D(GLES20.GL_TEXTURE_2D, 0, 0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
+            GLES20.glFinish();
+            GLES20.glFinish();
+        }
+        long t2 = System.currentTimeMillis();
+        textSubImageCost = t2 - t1;
+        totaltextImageCost += textImageCost;
+        totaltextSubImageCost += textSubImageCost;
+        Log.i("lvhiei", String.format("test image:%d,%d,total:%d,%d", textImageCost, textSubImageCost, totaltextImageCost, totaltextSubImageCost));
+
         GLES20.glUniform1i(mTextureLoc, 0);
         GLES20.glUniformMatrix4fv(mMatrixLoc, 1, false, mMatrixUtil.getFinalMatrix(), 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, 4);

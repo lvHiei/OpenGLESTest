@@ -23,4 +23,9 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.lvhiei.openglestest", appContext.getPackageName());
     }
+
+    @Test
+    public void testMonitor(){
+        Monitor.getProcInfo();
+    }
 }
